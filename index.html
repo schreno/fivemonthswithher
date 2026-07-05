@@ -11,7 +11,7 @@
 
     <style>
         /* ============================================================
-           CUSTOM FONTS from /Fonts folder
+           CUSTOM FONTS
            ============================================================ */
         @font-face {
             font-family: 'RyukExtra';
@@ -78,7 +78,54 @@
         }
 
         /* ============================================================
-           INTRO TRIGGER GATEWAY
+           ORIENTATION OVERLAY (mobile portrait → landscape prompt)
+           ============================================================ */
+        #orientation-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: var(--void);
+            flex-direction: column;
+            padding: 2rem;
+            text-align: center;
+            color: #fff;
+        }
+        #orientation-overlay.active {
+            display: flex;
+        }
+        #orientation-overlay .rot-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: rotatePhone 2.4s ease-in-out infinite;
+        }
+        @keyframes rotatePhone {
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(90deg);
+            }
+        }
+        #orientation-overlay p {
+            font-family: 'EB Garamond', serif;
+            font-size: 1.4rem;
+            max-width: 300px;
+            opacity: 0.85;
+            line-height: 1.5;
+            margin: 0.25rem 0;
+        }
+        #orientation-overlay .sub {
+            font-size: 0.95rem;
+            opacity: 0.5;
+            margin-top: 1rem;
+        }
+
+        /* ============================================================
+           INTRO GATEWAY
            ============================================================ */
         #intro-gate {
             position: fixed;
@@ -102,13 +149,14 @@
             font-weight: 400;
             text-transform: lowercase;
             transition: color 0.3s ease;
+            user-select: none;
         }
         .gate-text:hover {
             color: rgba(255, 255, 255, 0.85);
         }
 
         /* ============================================================
-           STAGE & WRAPPER — long, smooth camera tilt
+           STAGE & WRAPPER
            ============================================================ */
         #stage {
             position: fixed;
@@ -149,7 +197,7 @@
         }
 
         /* ============================================================
-           SKY CONTENT — full, beautiful, fills viewport
+           SKY CONTENT
            ============================================================ */
         #sky-content {
             position: absolute;
@@ -267,7 +315,7 @@
         }
 
         /* ============================================================
-           VERTICAL WIND STREAKS — fade out naturally
+           VERTICAL WIND STREAKS
            ============================================================ */
         .wind-streak {
             position: absolute;
@@ -292,7 +340,7 @@
         }
 
         /* ============================================================
-           BOOK CONTAINER — properly centered, no glow
+           BOOK CONTAINER — responsive + mobile-friendly
            ============================================================ */
         #book-wrap {
             position: absolute;
@@ -339,6 +387,151 @@
             width: 100%;
             height: 100%;
             transform-style: preserve-3d;
+        }
+
+        /* ============================================================
+           MOBILE‑FIRST BOOK SIZING OVERRIDES
+           ============================================================ */
+        @media (max-width: 600px) and (orientation: portrait) {
+            /* In portrait, make the book fit the screen height */
+            #book-wrap {
+                width: min(78vw, 300px);
+                height: min(108vw, 420px);
+                transform: translate(-50%, -50%) scale(0.88);
+            }
+            #book-wrap.visible {
+                transform: translate(-50%, -50%) scale(0.92);
+            }
+            #book-wrap.open {
+                transform: translate(0%, -50%) scale(0.92);
+            }
+
+            /* Bigger text inside the book on mobile */
+            .rule-title {
+                font-size: clamp(1.4rem, 4.2vw, 2.0rem) !important;
+            }
+            .rule-line {
+                font-size: clamp(1.1rem, 3.2vw, 1.6rem) !important;
+            }
+            .typewriter-text {
+                font-size: clamp(1.2rem, 4.0vw, 1.7rem) !important;
+                line-height: 1.7 !important;
+            }
+            .page-hint {
+                font-size: 1.4rem !important;
+            }
+            .cover-hint {
+                font-size: 0.9rem !important;
+            }
+            .closing-mark {
+                font-size: clamp(2.0rem, 6vw, 2.8rem) !important;
+            }
+            .msg-inner {
+                padding: 14% 8% 10% 6% !important;
+            }
+            .rule-inner {
+                padding: 10% 6% 10% 10% !important;
+            }
+        }
+
+        /* ============================================================
+           LANDSCAPE ON SMALL SCREENS — shrink book and sky, enlarge text
+           ============================================================ */
+        @media (max-width: 900px) and (orientation: landscape) {
+            #book-wrap {
+                width: min(55vh, 320px);
+                height: min(75vh, 440px);
+                transform: translate(-50%, -50%) scale(0.95);
+            }
+            #book-wrap.visible {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            #book-wrap.open {
+                transform: translate(0%, -50%) scale(1);
+            }
+
+            /* Shrink moon and sky text */
+            .moon {
+                width: clamp(60px, 12vh, 130px);
+                height: clamp(60px, 12vh, 130px);
+                margin-bottom: 1.2rem;
+            }
+            .sky-message .main {
+                font-size: clamp(1.8rem, 5vh, 3.2rem) !important;
+            }
+            .sky-message .sub {
+                font-size: clamp(1rem, 2.8vh, 1.6rem) !important;
+            }
+            .star {
+                width: 1.5px !important;
+                height: 1.5px !important;
+            }
+
+            /* Larger text inside the book for readability */
+            .rule-title {
+                font-size: clamp(1.2rem, 3.2vh, 1.6rem) !important;
+            }
+            .rule-line {
+                font-size: clamp(1.0rem, 2.6vh, 1.4rem) !important;
+            }
+            .typewriter-text {
+                font-size: clamp(1.1rem, 3.2vh, 1.5rem) !important;
+                line-height: 1.7 !important;
+            }
+            .page-hint {
+                font-size: 1.3rem !important;
+            }
+            .cover-hint {
+                font-size: 0.85rem !important;
+            }
+            .closing-mark {
+                font-size: clamp(1.8rem, 5vh, 2.5rem) !important;
+            }
+            .msg-inner {
+                padding: 12% 10% 8% 6% !important;
+            }
+            .rule-inner {
+                padding: 10% 6% 10% 10% !important;
+            }
+
+            /* Final letter card */
+            #final-card {
+                width: min(80vh, 500px);
+                height: min(110vh, 700px);
+            }
+            #final-text {
+                font-size: clamp(0.8rem, 2.2vh, 1.1rem) !important;
+            }
+        }
+
+        @media (max-width: 400px) and (orientation: portrait) {
+            /* Very small phones */
+            #book-wrap {
+                width: min(74vw, 260px);
+                height: min(102vw, 370px);
+            }
+            #book-wrap.visible {
+                transform: translate(-50%, -50%) scale(0.88);
+            }
+            #book-wrap.open {
+                transform: translate(0%, -50%) scale(0.88);
+            }
+            .typewriter-text {
+                font-size: clamp(1.1rem, 4.4vw, 1.5rem) !important;
+            }
+            .rule-title {
+                font-size: clamp(1.2rem, 4.4vw, 1.6rem) !important;
+            }
+            .rule-line {
+                font-size: clamp(0.95rem, 3.6vw, 1.3rem) !important;
+            }
+        }
+
+        @media (min-width: 900px) {
+            #book-wrap {
+                width: min(40vw, 470px);
+                height: min(56vw, 660px);
+            }
         }
 
         /* ============================================================
@@ -443,7 +636,7 @@
         }
 
         /* ============================================================
-           TYPOGRAPHY & CONTENT (inside book) — with custom fonts
+           TYPOGRAPHY & CONTENT (inside book)
            ============================================================ */
         .rule-inner,
         .msg-inner {
@@ -585,7 +778,7 @@
         }
 
         /* ============================================================
-           FINAL LETTER PANEL CONFIGURATIONS (Phase 5 Transition)
+           FINAL LETTER PANEL
            ============================================================ */
         #final-screen {
             position: fixed;
@@ -601,8 +794,8 @@
         }
         #final-card {
             position: relative;
-            width: min(95vw, 600px);      /* much wider – up to 95% of screen or 600px */
-            height: min(150vw, 800px);    /* much taller – up to 150% of viewport width or 800px */
+            width: min(95vw, 600px);
+            height: min(150vw, 800px);
             background: url('deathnote-bpage.jpg') no-repeat center/cover;
             box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.05);
             border-radius: 4px;
@@ -614,7 +807,7 @@
             right: 10%;
             bottom: 8%;
             font-family: 'DeathFont2', 'EB Garamond', serif;
-            font-size: clamp(0.75rem, 2.0vw, 1.0rem);   /* smaller text */
+            font-size: clamp(0.75rem, 2.0vw, 1.0rem);
             line-height: 1.65;
             color: rgba(255, 255, 255, 0.85);
             white-space: pre-wrap;
@@ -623,7 +816,7 @@
         }
 
         /* ============================================================
-           VIGNETTE (fixed over viewport)
+           VIGNETTE
            ============================================================ */
         #vignette {
             position: fixed;
@@ -666,27 +859,8 @@
         }
 
         /* ============================================================
-           RESPONSIVE
+           RESPONSIVE (general)
            ============================================================ */
-        @media (max-width: 480px) {
-            #book-wrap {
-                width: 86vw;
-                height: 122vw;
-            }
-            .rule-inner {
-                padding: 8% 6% 8% 10%;
-            }
-            .msg-inner {
-                padding: 13% 10% 8% 6%;
-            }
-        }
-        @media (min-width: 900px) {
-            #book-wrap {
-                width: min(40vw, 470px);
-                height: min(56vw, 660px);
-            }
-        }
-
         @media (prefers-reduced-motion: reduce) {
             #wrapper,
             .leaf,
@@ -700,6 +874,16 @@
     </style>
 </head>
 <body>
+
+    <!-- ============================================================
+    ORIENTATION OVERLAY (mobile portrait → landscape prompt)
+    ============================================================ -->
+    <div id="orientation-overlay">
+        <div class="rot-icon">📱</div>
+        <p>Please rotate your device</p>
+        <p style="font-size:1.1rem; opacity:0.7;">to <strong>landscape</strong> mode</p>
+        <div class="sub">for the best experience</div>
+    </div>
 
     <!-- INTRO GATE -->
     <div id="intro-gate">
@@ -761,9 +945,9 @@
 
     <script>
         /* ============================================================
-           🎯  PHASE START  —  change this to 2, 3, or 4 to jump ahead
+           🎯  PHASE START
            ============================================================ */
-        const PHASESTART = 4; // 1 = first read, 2 = second, 3 = third, 4 = fourth
+        const PHASESTART = 4;
 
         // ============================================================
         // DEBUG MODE
@@ -793,7 +977,7 @@
         }
 
         // ============================================================
-        // PHASE 1 — FIRST READ (confession)
+        // PHASE 1 — FIRST READ
         // ============================================================
         const RULES = [{
             roman: "I",
@@ -817,7 +1001,7 @@
             `Happy 5 Months, ${HER_NAME}.\n\nTo many more rules written,\nand every one of them about you.\n\nForever yours.`;
 
         // ============================================================
-        // PHASE 2 — SECOND READ (promise)
+        // PHASE 2 — SECOND READ
         // ============================================================
         const RULES_SECOND = [{
             roman: "I",
@@ -837,7 +1021,7 @@
             `Welcome back, my love.\n\nEvery time I open this book,\nI fall for you all over again.\n\nForever and always,\nyours.`;
 
         // ============================================================
-        // PHASE 3 — THIRD READ (homecoming)
+        // PHASE 3 — THIRD READ
         // ============================================================
         const RULES_THIRD = [{
             roman: "I",
@@ -857,7 +1041,7 @@
             `Three times I've opened this book.\nThree times I've fallen for you.\n\nIt never gets old.\nIt only gets truer.\n\nI'm not going anywhere.`;
 
         // ============================================================
-        // PHASE 4 — FOURTH READ (eternity)
+        // PHASE 4 — FOURTH READ
         // ============================================================
         const RULES_FOURTH = [{
             roman: "I",
@@ -892,13 +1076,13 @@
         const sndType = document.getElementById('snd-type');
         const sndWhoosh = document.getElementById('snd-whoosh');
 
-        // phase audio
         const sndSuspicious = document.getElementById('snd-suspicious');
         const sndLawliet2 = document.getElementById('snd-lawliet2');
         const sndLawliet3 = document.getElementById('snd-lawliet3');
         const sndLawliet4 = document.getElementById('snd-lawliet4');
 
-        // ---- PHASE STATE ----
+        const orientationOverlay = document.getElementById('orientation-overlay');
+
         let currentPhase = PHASESTART;
         let isSecondRead = (PHASESTART > 1);
 
@@ -906,6 +1090,63 @@
         let phaseFadeInterval = null;
         let phaseSuspicious = null;
         let phaseLawliet = null;
+
+        /* ============================================================
+           MOBILE + ORIENTATION DETECTION
+           ============================================================ */
+        function isMobile() {
+            return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                window.innerWidth < 768;
+        }
+
+        function isLandscape() {
+            return window.innerWidth > window.innerHeight;
+        }
+
+        function checkOrientation() {
+            if (!isMobile()) {
+                orientationOverlay.classList.remove('active');
+                return true;
+            }
+            if (isLandscape()) {
+                orientationOverlay.classList.remove('active');
+                return true;
+            } else {
+                orientationOverlay.classList.add('active');
+                return false;
+            }
+        }
+
+        // Listen for orientation / resize changes
+        window.addEventListener('resize', function() {
+            var ok = checkOrientation();
+            if (ok) {
+                // If we're now in a valid state, ensure gate is visible
+                if (introGate.classList.contains('fade-out') === false) {
+                    // gate is still visible, keep it
+                }
+            }
+        });
+        window.addEventListener('orientationchange', function() {
+            setTimeout(checkOrientation, 400);
+        });
+
+        // Initial check — gate starts hidden until orientation is OK on mobile
+        var orientationOk = checkOrientation();
+        if (!orientationOk) {
+            // On mobile portrait: hide the gate entirely (it's behind the overlay anyway)
+            introGate.style.display = 'none';
+        } else {
+            introGate.style.display = 'flex';
+        }
+
+        // When orientation becomes valid, show the gate
+        var orientationCheckInterval = setInterval(function() {
+            if (checkOrientation()) {
+                introGate.style.display = 'flex';
+                clearInterval(orientationCheckInterval);
+            }
+        }, 500);
 
         /* ============================================================
            TYPE SOUND
@@ -919,7 +1160,7 @@
         }
 
         /* ============================================================
-           AMBIENCE FADE-IN (reusable)
+           AMBIENCE FADE-IN
            ============================================================ */
         function fadeInAmbience(audioElement, targetVolume, durationMs) {
             if (!audioElement) return;
@@ -1044,7 +1285,7 @@
         }
 
         /* ============================================================
-           SEQUENCE — first appearance, book fades in
+           SEQUENCE — first appearance
            ============================================================ */
         function runSequence() {
             introGate.classList.add('fade-out');
@@ -1054,7 +1295,6 @@
                 bookWrap.classList.add('visible');
                 buildLeaf(0);
 
-                // Death Note bell
                 if (sndFadeIn) {
                     sndFadeIn.volume = 0.3;
                     sndFadeIn.currentTime = 0;
@@ -1084,14 +1324,12 @@
                     }, 2500);
                 }
 
-                // Main ambience
                 if (sndAmbience) {
                     setTimeout(function() {
                         fadeInAmbience(sndAmbience, 0.15, 4500);
                     }, 800);
                 }
 
-                // First lawliet theme (only for phase 1 — for phases 2-4 we rely on phase audio)
                 if (sndLawliet && PHASESTART === 1) {
                     setTimeout(function() {
                         fadeInAmbience(sndLawliet, 0.01, 8000);
@@ -1101,9 +1339,21 @@
             }, 3000);
         }
 
-        gateBtn.addEventListener('click', runSequence);
+        // Gate click — only if orientation is valid
+        gateBtn.addEventListener('click', function() {
+            if (isMobile() && !isLandscape()) {
+                // Should not happen because gate is hidden in portrait, but safety
+                orientationOverlay.classList.add('active');
+                return;
+            }
+            runSequence();
+        });
         gateBtn.addEventListener('touchstart', function(e) {
             e.preventDefault();
+            if (isMobile() && !isLandscape()) {
+                orientationOverlay.classList.add('active');
+                return;
+            }
             runSequence();
         }, { passive: false });
 
@@ -1156,7 +1406,7 @@
         }
 
         /* ============================================================
-           LEAF FACTORY — phase‑aware
+           LEAF FACTORY
            ============================================================ */
         var flipZ = 1000;
         var activeIndex = 0;
@@ -1537,7 +1787,6 @@
 
             if (index > RULES.length) return;
 
-            // ---- BOOK OPENING (cover clicked) ----
             if (index === 0) {
                 if (currentPhase >= 2 && currentPhase <= 4) {
                     startPhaseAudio(currentPhase);
