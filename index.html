@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Love Note</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Dancing+Script:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+
+    <style>
+        /* ============================================================
+           CUSTOM FONTS from /Fonts folder
+           ============================================================ */
+        @font-face {
+            font-family: 'RyukExtra';
+            src: url('Fonts/RyukExtra.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'DeathFont';
+            src: url('Fonts/DeathFont.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'RyukExtra2';
+            src: url('Fonts/RyukExtra2.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'DeathFont2';
+            src: url('Fonts/DeathFont2.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        /* ============================================================
+           ROOT / RESET
+           ============================================================ */
+        :root {
+            --void: #000;
+            --charcoal: #0b0b0c;
+            --leather: #000000;
+            --leather-hi: #232025;
+            --blood: #7a0f16;
+            --blood-bright: #b3141c;
+            --parchment: #f4ebd0;
+            --parchment-dark: #e8dcb8;
+            --ink: #2b2420;
+            --ash: #cfcad0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--void);
+            overflow: hidden;
+            font-family: 'EB Garamond', serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ============================================================
+           INTRO TRIGGER GATEWAY
+           ============================================================ */
+        #intro-gate {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--void);
+            transition: opacity 1.5s ease;
+        }
+        #intro-gate.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .gate-text {
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 0.9rem;
+            letter-spacing: 0.15em;
+            cursor: pointer;
+            font-weight: 400;
+            text-transform: lowercase;
+            transition: color 0.3s ease;
+        }
+        .gate-text:hover {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* ============================================================
+           STAGE & WRAPPER — long, smooth camera tilt
+           ============================================================ */
+        #stage {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 10;
+            background: var(--void);
+        }
+
+        #wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200vh;
+            transform: translateY(-50vh);
+            transition: transform 5s cubic-bezier(0.22, 0.61, 0.36, 1);
+            will-change: transform;
+            background:
+                radial-gradient(ellipse at 50% 60%, #0a0a0c 0%, #000 100%);
+        }
+        #wrapper.camera-up {
+            transform: translateY(0vh);
+        }
+
+        #wrapper::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom,
+                    rgba(11, 14, 42, 0.95) 0%,
+                    rgba(10, 10, 12, 0.8) 30%,
+                    transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ============================================================
+           SKY CONTENT — full, beautiful, fills viewport
+           ============================================================ */
+        #sky-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            opacity: 0;
+            transition: opacity 1.8s ease;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse at 50% 40%, #0f1428 0%, #070915 60%, #000 100%);
+        }
+        #sky-content::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 50% 100%, rgba(60, 30, 80, 0.15) 0%, transparent 70%),
+                radial-gradient(ellipse at 30% 20%, rgba(40, 50, 100, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        #sky-content.visible {
+            opacity: 1;
+        }
+
+        .moon {
+            width: clamp(100px, 22vw, 200px);
+            height: clamp(100px, 22vw, 200px);
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #fff, #d0d8ff);
+            box-shadow:
+                0 0 40px rgba(255, 255, 255, 0.3),
+                0 0 80px rgba(255, 255, 255, 0.15),
+                0 0 160px rgba(255, 255, 255, 0.08);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+        .moon::after {
+            content: "";
+            position: absolute;
+            top: 15%;
+            left: 20%;
+            width: 30%;
+            height: 30%;
+            border-radius: 50%;
+            background: rgba(200, 210, 255, 0.12);
+            filter: blur(10px);
+        }
+        .moon::before {
+            content: "";
+            position: absolute;
+            bottom: 20%;
+            right: 15%;
+            width: 15%;
+            height: 15%;
+            border-radius: 50%;
+            background: rgba(180, 190, 240, 0.08);
+            filter: blur(6px);
+        }
+
+        .sky-message {
+            font-family: 'Dancing Script', cursive;
+            color: #fff;
+            text-align: center;
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.15), 0 0 80px rgba(255, 255, 255, 0.05);
+            padding: 0 1rem;
+            position: relative;
+            z-index: 2;
+        }
+        .sky-message .main {
+            font-size: clamp(2.2rem, 9vw, 5rem);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            line-height: 1.3;
+            background: linear-gradient(to right, #fff, #e0e8ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none;
+        }
+        .sky-message .sub {
+            font-size: clamp(1.1rem, 4.5vw, 2.5rem);
+            font-weight: 400;
+            opacity: 0.85;
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.9);
+            -webkit-text-fill-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: twinkle 2.5s ease-in-out infinite alternate;
+        }
+        @keyframes twinkle {
+            0% {
+                opacity: 0.2;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 0.9;
+                transform: scale(1.2);
+            }
+        }
+
+        /* ============================================================
+           VERTICAL WIND STREAKS — fade out naturally
+           ============================================================ */
+        .wind-streak {
+            position: absolute;
+            width: 2px;
+            height: 60px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
+            border-radius: 2px;
+            pointer-events: none;
+            z-index: 20;
+            opacity: 0;
+            animation: windFall 0.9s linear forwards;
+        }
+        @keyframes windFall {
+            0% {
+                opacity: 0.6;
+                transform: translateY(-100px);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(calc(100vh + 100px));
+            }
+        }
+
+        /* ============================================================
+           BOOK CONTAINER — properly centered, no glow
+           ============================================================ */
+        #book-wrap {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: min(84vw, 355px);
+            height: min(116vw, 515px);
+            transform: translate(-50%, -50%) scale(0.92);
+            opacity: 0;
+            transform-style: preserve-3d;
+            perspective: 2200px;
+            perspective-origin: 50% 50%;
+            will-change: transform, opacity;
+            z-index: 10;
+            transition: opacity 2.4s ease, transform 1.7s cubic-bezier(0.65, 0.05, 0.36, 1);
+        }
+        #book-wrap.visible {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        #book-wrap.open {
+            transform: translate(0%, -50%) scale(1);
+        }
+        #book-wrap.hidden {
+            opacity: 0 !important;
+            pointer-events: none;
+        }
+
+        #book-wrap::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -14%;
+            width: 120%;
+            height: 22%;
+            transform: translateX(-50%);
+            background: radial-gradient(ellipse at center, rgba(179, 20, 28, 0.18) 0%, rgba(0, 0, 0, 0) 70%);
+            filter: blur(6px);
+            pointer-events: none;
+        }
+
+        .book {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+
+        /* ============================================================
+           LEAVES
+           ============================================================ */
+        .leaf {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            transform: rotateY(0deg);
+            transition: transform 1.7s cubic-bezier(0.65, 0.05, 0.36, 1);
+            will-change: transform;
+        }
+        .leaf.flipped {
+            transform: rotateY(-180deg);
+            pointer-events: none;
+        }
+        .leaf.locked {
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .face {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            overflow: hidden;
+        }
+        .face-front {
+            border-radius: 2px 8px 8px 2px;
+        }
+        .face-back {
+            border-radius: 8px 2px 2px 8px;
+            transform: rotateY(180deg);
+        }
+
+        .parchment {
+            background:
+                radial-gradient(ellipse 140% 110% at 50% 50%, rgba(255, 255, 255, 0.05), transparent 80%),
+                linear-gradient(180deg, var(--parchment) 0%, var(--parchment-dark) 100%);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+        .parchment::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                repeating-radial-gradient(circle at 10% 20%, rgba(120, 95, 45, 0.05) 0px, transparent 2px),
+                repeating-radial-gradient(circle at 70% 60%, rgba(120, 95, 45, 0.05) 0px, transparent 2px),
+                repeating-radial-gradient(circle at 40% 85%, rgba(120, 95, 45, 0.05) 0px, transparent 3px);
+            background-size: 6px 6px, 9px 9px, 7px 7px;
+            mix-blend-mode: multiply;
+            opacity: .85;
+        }
+        .parchment::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                radial-gradient(circle at 16% 84%, rgba(120, 70, 28, 0.28) 0%, transparent 24%),
+                radial-gradient(circle at 84% 10%, rgba(101, 58, 18, 0.22) 0%, transparent 28%),
+                radial-gradient(circle at 55% 96%, rgba(90, 54, 14, 0.20) 0%, transparent 20%),
+                radial-gradient(circle at 6% 28%, rgba(80, 50, 15, 0.16) 0%, transparent 18%),
+                radial-gradient(circle at 92% 62%, rgba(70, 42, 12, 0.14) 0%, transparent 16%),
+                repeating-linear-gradient(to bottom,
+                    transparent 0,
+                    transparent 1.7em,
+                    rgba(70, 50, 20, 0.11) 1.7em,
+                    rgba(70, 50, 20, 0.11) calc(1.7em + 1px)),
+                radial-gradient(ellipse at center, transparent 52%, rgba(60, 40, 15, 0.30) 100%);
+            mix-blend-mode: multiply;
+        }
+
+        .leather {
+            background-color: #000 !important;
+            background-image: none !important;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+        .leather::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 1px, transparent 1px, transparent 3px),
+                repeating-linear-gradient(25deg, rgba(0, 0, 0, 0.25) 0px, rgba(0, 0, 0, 0.25) 1px, transparent 1px, transparent 4px);
+            opacity: .5;
+            mix-blend-mode: overlay;
+        }
+        .leather::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.06), transparent 55%);
+        }
+
+        /* ============================================================
+           TYPOGRAPHY & CONTENT (inside book) — with custom fonts
+           ============================================================ */
+        .rule-inner,
+        .msg-inner {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+        }
+        .rule-inner {
+            padding: 9% 8% 9% 12%;
+            color: rgba(43, 36, 32, 0.55);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .rule-title {
+            font-family: 'DeathFont', 'Cinzel', serif;
+            font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+            letter-spacing: 0.12em;
+            color: var(--blood);
+            font-weight: 700;
+            margin: 0 0 0.6em 0;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(122, 15, 22, 0.35);
+            padding-bottom: 0.4em;
+        }
+        .rule-line {
+            font-family: 'DeathFont2', 'EB Garamond', serif;
+            font-size: clamp(1rem, 2.8vw, 1.4rem);
+            line-height: 1.8;
+            font-style: italic;
+            font-weight: 400;
+            color: rgba(43, 36, 32, 0.85);
+        }
+
+        .msg-inner {
+            padding: 11% 12% 8% 8%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .typewriter-text {
+            font-family: 'RyukExtra', 'Dancing Script', cursive;
+            font-weight: normal;
+            font-size: clamp(1.0rem, 3.4vw, 1.45rem);
+            line-height: 1.55;
+            color: var(--ink);
+            text-shadow: 0 0 1px rgba(43, 36, 32, 0.15);
+            white-space: pre-wrap;
+            text-align: left;
+            margin: 0;
+            width: 100%;
+        }
+        .caret {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: var(--ink);
+            margin-left: 2px;
+            vertical-align: -0.1em;
+            animation: blink 0.85s steps(1) infinite;
+        }
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .page-hint {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 6%;
+            text-align: center;
+            font-family: 'RyukExtra2', 'EB Garamond', serif;
+            font-style: italic;
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: 0.08em;
+            color: rgba(0, 0, 0, 0.65);
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            pointer-events: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .page-hint.show {
+            opacity: 1;
+            animation: pulseHint 2.6s ease-in-out infinite;
+        }
+        @keyframes pulseHint {
+            0%,
+            100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: .35;
+            }
+        }
+
+        .cover-hint {
+            position: absolute;
+            bottom: 6%;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-family: 'EB Garamond', serif;
+            font-style: italic;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            color: rgba(230, 220, 210, 0.3);
+            z-index: 2;
+            animation: pulseHint 2.6s ease-in-out infinite;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .closing-mark {
+            font-size: clamp(1.5rem, 5vw, 2.2rem);
+            color: var(--blood);
+            margin-top: 0.8em;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            display: none;
+        }
+        .closing-mark.show {
+            display: block;
+            opacity: 1;
+            animation: heartGlow 2.4s ease-in-out infinite;
+        }
+        @keyframes heartGlow {
+            0%,
+            100% {
+                text-shadow: 0 0 10px rgba(122, 15, 22, 0.35);
+            }
+            50% {
+                text-shadow: 0 0 22px rgba(122, 15, 22, 0.75);
+            }
+        }
+
+        /* ============================================================
+           FINAL LETTER PANEL CONFIGURATIONS (Phase 5 Transition)
+           ============================================================ */
+        #final-screen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--void);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 2.5s ease;
+            z-index: 60;
+        }
+        #final-card {
+            position: relative;
+            width: min(95vw, 600px);      /* much wider – up to 95% of screen or 600px */
+            height: min(150vw, 800px);    /* much taller – up to 150% of viewport width or 800px */
+            background: url('deathnote-bpage.jpg') no-repeat center/cover;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        #final-text {
+            position: absolute;
+            top: 24%;
+            left: 10%;
+            right: 10%;
+            bottom: 8%;
+            font-family: 'DeathFont2', 'EB Garamond', serif;
+            font-size: clamp(0.75rem, 2.0vw, 1.0rem);   /* smaller text */
+            line-height: 1.65;
+            color: rgba(255, 255, 255, 0.85);
+            white-space: pre-wrap;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        /* ============================================================
+           VIGNETTE (fixed over viewport)
+           ============================================================ */
+        #vignette {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.75) 100%);
+            z-index: 30;
+        }
+
+        /* ============================================================
+           EMBERS
+           ============================================================ */
+        .ember {
+            position: absolute;
+            bottom: -10px;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--ash);
+            opacity: 0;
+            filter: blur(0.3px);
+            animation: drift linear infinite;
+            pointer-events: none;
+        }
+        @keyframes drift {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            8% {
+                opacity: .55;
+            }
+            92% {
+                opacity: .35;
+            }
+            100% {
+                transform: translateY(-110vh) translateX(var(--dx, 20px));
+                opacity: 0;
+            }
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 480px) {
+            #book-wrap {
+                width: 86vw;
+                height: 122vw;
+            }
+            .rule-inner {
+                padding: 8% 6% 8% 10%;
+            }
+            .msg-inner {
+                padding: 13% 10% 8% 6%;
+            }
+        }
+        @media (min-width: 900px) {
+            #book-wrap {
+                width: min(40vw, 470px);
+                height: min(56vw, 660px);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #wrapper,
+            .leaf,
+            .ember,
+            .page-hint,
+            .wind-streak {
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- INTRO GATE -->
+    <div id="intro-gate">
+        <div class="gate-text" id="gate-btn">click me</div>
+    </div>
+
+    <!-- AUDIO ELEMENTS -->
+    <audio id="snd-fadein" src="Sounds/deathnotebell.mp3" preload="auto"></audio>
+    <audio id="snd-ambience" src="Sounds/ambience.mp3" preload="auto" loop></audio>
+    <audio id="snd-lawliet" src="Sounds/lawliet.mp3" preload="auto" loop></audio>
+    <audio id="snd-pageturn" src="Sounds/page-turn.mp3" preload="auto"></audio>
+    <audio id="snd-type" src="Sounds/type.mp3" preload="auto"></audio>
+    <audio id="snd-whoosh" src="Sounds/whoosh.mp3" preload="auto"></audio>
+
+    <!-- phase audio -->
+    <audio id="snd-suspicious" src="Sounds/suspicious.mp3" preload="auto"></audio>
+    <audio id="snd-lawliet2" src="Sounds/lawliet2.mp3" preload="auto" loop></audio>
+    <audio id="snd-lawliet3" src="Sounds/lawliet3.mp3" preload="auto" loop></audio>
+    <audio id="snd-lawliet4" src="Sounds/lawliet4.mp3" preload="auto" loop></audio>
+
+    <!-- STAGE -->
+    <div id="stage">
+        <div id="wrapper">
+            <!-- SKY CONTENT -->
+            <div id="sky-content">
+                <div class="moon"></div>
+                <div class="sky-message">
+                    <div class="main">Happy 5 monthsarry</div>
+                    <div class="sub">to my baby — you said you loved this anime so..</div>
+                </div>
+                <!-- stars -->
+                <div class="star" style="top:8%; left:12%; animation-delay:0.2s; width:2px; height:2px;"></div>
+                <div class="star" style="top:20%; left:85%; animation-delay:1.1s; width:3px; height:3px;"></div>
+                <div class="star" style="top:45%; left:6%; animation-delay:0.7s; width:2px; height:2px;"></div>
+                <div class="star" style="top:65%; left:92%; animation-delay:1.8s; width:4px; height:4px;"></div>
+                <div class="star" style="top:35%; left:70%; animation-delay:0.4s; width:2px; height:2px;"></div>
+                <div class="star" style="top:78%; left:25%; animation-delay:0.9s; width:2px; height:2px;"></div>
+                <div class="star" style="top:12%; left:55%; animation-delay:1.5s; width:2px; height:2px;"></div>
+                <div class="star" style="top:55%; left:40%; animation-delay:0.6s; width:3px; height:3px;"></div>
+                <div class="star" style="top:30%; left:30%; animation-delay:2.1s; width:2px; height:2px;"></div>
+                <div class="star" style="top:72%; left:60%; animation-delay:0.3s; width:2px; height:2px;"></div>
+            </div>
+
+            <!-- BOOK -->
+            <div id="book-wrap">
+                <div class="book" id="book"></div>
+            </div>
+        </div>
+
+        <!-- FINAL CANVAS LETTER MODULE -->
+        <div id="final-screen">
+            <div id="final-card">
+                <div id="final-text"></div>
+            </div>
+        </div>
+
+        <div id="vignette"></div>
+    </div>
+
+    <script>
+        /* ============================================================
+           🎯  PHASE START  —  change this to 2, 3, or 4 to jump ahead
+           ============================================================ */
+        const PHASESTART = 4; // 1 = first read, 2 = second, 3 = third, 4 = fourth
+
+        // ============================================================
+        // DEBUG MODE
+        // ============================================================
+        const DEBUG_MODE = true;
+
+        // ============================================================
+        // CONFIG
+        // ============================================================
+        const HER_NAME = "Cara";
+
+        let TYPING_SPEED_MS = 42;
+        let PAUSE_AFTER_LINE_MS = 550;
+        let FLIP_DURATION_MS = 1700;
+
+        if (DEBUG_MODE) {
+            TYPING_SPEED_MS = 5;
+            PAUSE_AFTER_LINE_MS = 20;
+            FLIP_DURATION_MS = 200;
+            var style = document.createElement('style');
+            style.textContent = `
+                .leaf { transition-duration: ${FLIP_DURATION_MS}ms !important; }
+                #book-wrap { transition-duration: 0.3s !important; }
+                #wrapper { transition-duration: 2s !important; }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // ============================================================
+        // PHASE 1 — FIRST READ (confession)
+        // ============================================================
+        const RULES = [{
+            roman: "I",
+            ruleText: "The human whose heart is written in this note shall fall for him, entirely, and forever.",
+            message: `Wait... it's not a Death Note.\nIt's a Love Note.\n\nHappy 5 Months to the girl who\ncompletely changed my world.`
+        }, {
+            roman: "II",
+            ruleText: "This note will not take effect unless the writer's feelings are true, and freely given.",
+            message: `Every day with you is my\nfavorite day.\n\nI fall for you again in a\nhundred small ways, every\nsingle time.`
+        }, {
+            roman: "III",
+            ruleText: "The one who writes this name shall never let it be erased, nor forgotten, nor replaced.",
+            message: `I love you, ${HER_NAME}.\nMore today than yesterday,\nand not nearly as much as\nI will tomorrow.`
+        }];
+
+        const LAST_RULE = {
+            label: "Last Rule",
+            ruleText: "No note, no rule, and no rewritten fate could ever undo how I feel about you."
+        };
+        const FINAL_MESSAGE =
+            `Happy 5 Months, ${HER_NAME}.\n\nTo many more rules written,\nand every one of them about you.\n\nForever yours.`;
+
+        // ============================================================
+        // PHASE 2 — SECOND READ (promise)
+        // ============================================================
+        const RULES_SECOND = [{
+            roman: "I",
+            ruleText: "The heart that reads these words a second time is bound to find new meaning.",
+            message: `You came back.\nI was hoping you would.\n\nThere's something about this book,\nand about you, that makes me\nwant to read it again and again.`
+        }, {
+            roman: "II",
+            ruleText: "This note shall reveal a deeper truth to those who return to it.",
+            message: `Every page we turn together\nwrites a new story.\n\nI don't just love you in the past tense.\nI love you in the present,\nand I'll love you in every\nfuture re-read.`
+        }, {
+            roman: "III",
+            ruleText: "The name written here is not just a name, it is a promise renewed.",
+            message: `I love you, ${HER_NAME}.\nAnd I will keep choosing you,\nevery single day,\nfor as long as these pages exist.`
+        }];
+
+        const FINAL_MESSAGE_SECOND =
+            `Welcome back, my love.\n\nEvery time I open this book,\nI fall for you all over again.\n\nForever and always,\nyours.`;
+
+        // ============================================================
+        // PHASE 3 — THIRD READ (homecoming)
+        // ============================================================
+        const RULES_THIRD = [{
+            roman: "I",
+            ruleText: "The heart that returns a third time discovers what it was always searching for.",
+            message: `Three times now.\nAnd every time, I find you\nwaiting for me.\n\nThere's no place I'd rather be.`
+        }, {
+            roman: "II",
+            ruleText: "This note reveals not what you want, but what you already have.",
+            message: `I don't need to write new rules.\nI just need to remember\nwhat I've known all along:\n\nYou are my home.`
+        }, {
+            roman: "III",
+            ruleText: "The name written here is not a wish — it is a homecoming.",
+            message: `I love you, ${HER_NAME}.\nNot for what you give me,\nbut for who you are.\nAnd who you are is everything.`
+        }];
+
+        const FINAL_MESSAGE_THIRD =
+            `Three times I've opened this book.\nThree times I've fallen for you.\n\nIt never gets old.\nIt only gets truer.\n\nI'm not going anywhere.`;
+
+        // ============================================================
+        // PHASE 4 — FOURTH READ (eternity)
+        // ============================================================
+        const RULES_FOURTH = [{
+            roman: "I",
+            ruleText: "The final rule is this: love is not a note to be written, but a life to be lived.",
+            message: `There are no more rules.\nOnly us.\n\nEvery word I've written\nhas led me here.`
+        }, {
+            roman: "II",
+            ruleText: "This note does not end. It echoes in every moment you choose me.",
+            message: `The ink will never dry.\nThe pages will never close.\n\nBecause you are not a chapter,\nyou are the whole book.`
+        }, {
+            roman: "III",
+            ruleText: "The name written here is not just my heart — it is my forever.",
+            message: `I love you, ${HER_NAME}.\nAnd I will love you\nfor as long as forever\nallows me to.`
+        }];
+
+        const FINAL_MESSAGE_FOURTH =
+            `Four times.\nCountless more to come.\n\nYou are not just a chapter in my book —\nyou are the whole story.\n\nForever yours,\nand only yours.`;
+
+        /* ============================================================
+           DOM REFS & STATE
+           ============================================================ */
+        const introGate = document.getElementById('intro-gate');
+        const gateBtn = document.getElementById('gate-btn');
+        const wrapper = document.getElementById('wrapper');
+        const skyContent = document.getElementById('sky-content');
+        const bookWrap = document.getElementById('book-wrap');
+        const book = document.getElementById('book');
+        const sndFadeIn = document.getElementById('snd-fadein');
+        const sndAmbience = document.getElementById('snd-ambience');
+        const sndLawliet = document.getElementById('snd-lawliet');
+        const sndPageTurn = document.getElementById('snd-pageturn');
+        const sndType = document.getElementById('snd-type');
+        const sndWhoosh = document.getElementById('snd-whoosh');
+
+        // phase audio
+        const sndSuspicious = document.getElementById('snd-suspicious');
+        const sndLawliet2 = document.getElementById('snd-lawliet2');
+        const sndLawliet3 = document.getElementById('snd-lawliet3');
+        const sndLawliet4 = document.getElementById('snd-lawliet4');
+
+        // ---- PHASE STATE ----
+        let currentPhase = PHASESTART;
+        let isSecondRead = (PHASESTART > 1);
+
+        let phaseAudioTimeout = null;
+        let phaseFadeInterval = null;
+        let phaseSuspicious = null;
+        let phaseLawliet = null;
+
+        /* ============================================================
+           TYPE SOUND
+           ============================================================ */
+        function playTypeSound() {
+            try {
+                const audio = new Audio('Sounds/type.mp3');
+                audio.volume = 0.25;
+                audio.play().catch(function() {});
+            } catch (_) {}
+        }
+
+        /* ============================================================
+           AMBIENCE FADE-IN (reusable)
+           ============================================================ */
+        function fadeInAmbience(audioElement, targetVolume, durationMs) {
+            if (!audioElement) return;
+            audioElement.volume = 0;
+            audioElement.play().catch(function() {});
+
+            var intervalStepMs = 50;
+            var totalSteps = durationMs / intervalStepMs;
+            var volumeIncrement = targetVolume / totalSteps;
+            var currentStep = 0;
+
+            var fadeInterval = setInterval(function() {
+                currentStep++;
+                if (audioElement.volume + volumeIncrement >= targetVolume) {
+                    audioElement.volume = targetVolume;
+                    clearInterval(fadeInterval);
+                } else {
+                    audioElement.volume += volumeIncrement;
+                }
+            }, intervalStepMs);
+            return fadeInterval;
+        }
+
+        /* ============================================================
+           PHASE AUDIO CONTROL
+           ============================================================ */
+        function getLawlietForPhase(phase) {
+            if (phase === 2) return sndLawliet2;
+            if (phase === 3) return sndLawliet3;
+            if (phase === 4) return sndLawliet4;
+            return null;
+        }
+
+        function startPhaseAudio(phase) {
+            stopPhaseAudio();
+            if (phase < 2 || phase > 4) return;
+
+            var lawlietAudio = getLawlietForPhase(phase);
+            if (!lawlietAudio) return;
+
+            phaseSuspicious = sndSuspicious;
+            phaseLawliet = lawlietAudio;
+
+            sndSuspicious.volume = 0.2;
+            sndSuspicious.currentTime = 0;
+            sndSuspicious.play().catch(function(err) {
+                console.log("Suspicious play error:", err);
+            });
+
+            phaseAudioTimeout = setTimeout(function() {
+                var targetVol = 0.01;
+                var duration = 8000;
+                phaseFadeInterval = fadeInAmbience(lawlietAudio, targetVol, duration);
+            }, 6000);
+        }
+
+        function stopPhaseAudio() {
+            if (phaseAudioTimeout) {
+                clearTimeout(phaseAudioTimeout);
+                phaseAudioTimeout = null;
+            }
+            if (phaseFadeInterval) {
+                clearInterval(phaseFadeInterval);
+                phaseFadeInterval = null;
+            }
+            if (phaseSuspicious) {
+                phaseSuspicious.pause();
+                phaseSuspicious.currentTime = 0;
+                phaseSuspicious = null;
+            }
+            if (phaseLawliet) {
+                phaseLawliet.pause();
+                phaseLawliet.currentTime = 0;
+                phaseLawliet = null;
+            }
+        }
+
+        /* ============================================================
+           GET RULES AND MESSAGES FOR CURRENT PHASE
+           ============================================================ */
+        function getRulesForPhase(phase) {
+            if (phase === 1) return RULES;
+            if (phase === 2) return RULES_SECOND;
+            if (phase === 3) return RULES_THIRD;
+            if (phase === 4) return RULES_FOURTH;
+            return RULES_FOURTH;
+        }
+
+        function getFinalMessageForPhase(phase) {
+            if (phase === 1) return FINAL_MESSAGE;
+            if (phase === 2) return FINAL_MESSAGE_SECOND;
+            if (phase === 3) return FINAL_MESSAGE_THIRD;
+            if (phase === 4) return FINAL_MESSAGE_FOURTH;
+            return FINAL_MESSAGE_FOURTH;
+        }
+
+        function getRuleTextForPhase(phase, index) {
+            var rules = getRulesForPhase(phase);
+            if (index < rules.length) return rules[index].ruleText;
+            return "No rule written yet.";
+        }
+
+        function getMessageForPhase(phase, index) {
+            var rules = getRulesForPhase(phase);
+            if (index < rules.length) return rules[index].message;
+            return "No message written yet.";
+        }
+
+        function updateRuleFacesForPhase(phase) {
+            var allLeaves = book.querySelectorAll('.leaf');
+            allLeaves.forEach(function(l) {
+                var idx = Number(l.dataset.index);
+                if (idx < RULES.length) {
+                    var titleEl = l.querySelector('.rule-title');
+                    var lineEl = l.querySelector('.rule-line');
+                    var roman = getRulesForPhase(phase)[idx]?.roman || (idx + 1);
+                    var ruleText = getRuleTextForPhase(phase, idx);
+                    if (titleEl) titleEl.textContent = "Rule " + roman;
+                    if (lineEl) lineEl.textContent = ruleText;
+                }
+            });
+        }
+
+        /* ============================================================
+           SEQUENCE — first appearance, book fades in
+           ============================================================ */
+        function runSequence() {
+            introGate.classList.add('fade-out');
+
+            setTimeout(function() {
+                bookWrap.classList.remove('hidden', 'open');
+                bookWrap.classList.add('visible');
+                buildLeaf(0);
+
+                // Death Note bell
+                if (sndFadeIn) {
+                    sndFadeIn.volume = 0.3;
+                    sndFadeIn.currentTime = 0;
+                    sndFadeIn.play().catch(function(err) {
+                        console.log("Audio play error:", err);
+                    });
+
+                    setTimeout(function() {
+                        var fadeStartTime = performance.now();
+                        var fadeDuration = 10000;
+                        var initialVolume = 0.3;
+
+                        var fadeOutInterval = setInterval(function() {
+                            var now = performance.now();
+                            var elapsed = now - fadeStartTime;
+                            var progress = Math.min(elapsed / fadeDuration, 1);
+                            var newVolume = initialVolume * (1 - progress);
+                            sndFadeIn.volume = Math.max(0, newVolume);
+
+                            if (progress >= 1) {
+                                sndFadeIn.volume = 0;
+                                sndFadeIn.pause();
+                                sndFadeIn.currentTime = 0;
+                                clearInterval(fadeOutInterval);
+                            }
+                        }, 50);
+                    }, 2500);
+                }
+
+                // Main ambience
+                if (sndAmbience) {
+                    setTimeout(function() {
+                        fadeInAmbience(sndAmbience, 0.15, 4500);
+                    }, 800);
+                }
+
+                // First lawliet theme (only for phase 1 — for phases 2-4 we rely on phase audio)
+                if (sndLawliet && PHASESTART === 1) {
+                    setTimeout(function() {
+                        fadeInAmbience(sndLawliet, 0.01, 8000);
+                    }, 4000);
+                }
+
+            }, 3000);
+        }
+
+        gateBtn.addEventListener('click', runSequence);
+        gateBtn.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            runSequence();
+        }, { passive: false });
+
+        /* ============================================================
+           EMBERS
+           ============================================================ */
+        function spawnEmbers() {
+            var wrapperEl = document.getElementById('wrapper');
+            var count = window.innerWidth < 600 ? 14 : 26;
+            for (var n = 0; n < count; n++) {
+                var e = document.createElement('div');
+                e.className = 'ember';
+                var left = Math.random() * 100;
+                var size = 1.5 + Math.random() * 2.5;
+                var duration = 10 + Math.random() * 14;
+                var delay = Math.random() * 14;
+                var dx = (Math.random() * 80 - 40) + 'px';
+                e.style.left = left + 'vw';
+                e.style.width = size + 'px';
+                e.style.height = size + 'px';
+                e.style.setProperty('--dx', dx);
+                e.style.animationDuration = duration + 's';
+                e.style.animationDelay = delay + 's';
+                wrapperEl.appendChild(e);
+            }
+        }
+        window.addEventListener('load', spawnEmbers);
+
+        /* ============================================================
+           VERTICAL WIND STREAKS
+           ============================================================ */
+        function spawnWindStreaks() {
+            var stage = document.getElementById('stage');
+            var count = 14;
+            for (var i = 0; i < count; i++) {
+                var streak = document.createElement('div');
+                streak.className = 'wind-streak';
+                var x = Math.random() * 100;
+                var delay = Math.random() * 0.6;
+                var height = 40 + Math.random() * 80;
+                streak.style.left = x + '%';
+                streak.style.height = height + 'px';
+                streak.style.animationDelay = delay + 's';
+                streak.style.animationDuration = (0.6 + Math.random() * 0.4) + 's';
+                stage.appendChild(streak);
+                setTimeout(function(el) {
+                    el.remove();
+                }, (delay + 1.2) * 1000, streak);
+            }
+        }
+
+        /* ============================================================
+           LEAF FACTORY — phase‑aware
+           ============================================================ */
+        var flipZ = 1000;
+        var activeIndex = 0;
+        var isClosing = false;
+
+        function buildLeaf(index) {
+            if (index > RULES.length + 1) return;
+            if (book.querySelector('.leaf[data-index="' + index + '"]')) return;
+
+            var leaf = document.createElement('div');
+            leaf.className = 'leaf locked';
+            leaf.dataset.index = index;
+            leaf.style.zIndex = 500 - index;
+
+            var isClosingLeaf = (index === RULES.length + 1);
+            var front = (index === 0) ? buildCoverFace() : buildMessageFace(isClosingLeaf);
+
+            var back;
+            if (index < RULES.length) {
+                var ruleText = getRuleTextForPhase(currentPhase, index);
+                var roman = getRulesForPhase(currentPhase)[index]?.roman || (index + 1);
+                back = buildRuleFace(roman, ruleText);
+            } else if (index === RULES.length) {
+                back = buildRuleFace("Last Rule", LAST_RULE.ruleText);
+            } else {
+                back = buildBlankBackFace();
+            }
+
+            leaf.appendChild(front);
+            leaf.appendChild(back);
+            book.appendChild(leaf);
+
+            leaf.addEventListener('click', function() {
+                handleLeafClick(leaf, index);
+            });
+            leaf.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                handleLeafClick(leaf, index);
+            }, { passive: false });
+
+            if (index === 0) {
+                leaf.classList.remove('locked');
+            }
+
+            buildLeaf(index + 1);
+        }
+
+        function buildCoverFace() {
+            var face = document.createElement('div');
+            face.className = 'face face-front leather';
+            face.innerHTML =
+                '<img src="deathnote-logo.png" style="width:80%;display:block;margin:0 auto;user-select:none;" alt="Death Note Logo">' +
+                '<div class="cover-hint" style="color:rgba(255,255,255,0.4);">tap to open</div>';
+            return face;
+        }
+
+        function buildRuleFace(roman, text) {
+            var title = roman === "Last Rule" ? roman : "Rule " + roman;
+            var face = document.createElement('div');
+            face.className = 'face face-back parchment';
+            face.innerHTML =
+                '<div class="rule-inner">' +
+                '<p class="rule-title">' + title + '</p>' +
+                '<p class="rule-line">' + text + '</p>' +
+                '</div>';
+            return face;
+        }
+
+        function buildMessageFace(isClosingLeaf) {
+            var face = document.createElement('div');
+            face.className = 'face face-front parchment';
+            if (isClosingLeaf) {
+                face.innerHTML =
+                    '<div class="msg-inner">' +
+                    '<p class="typewriter-text"><span class="caret"></span></p>' +
+                    '<p class="closing-mark">&#10084;</p>' +
+                    '</div>';
+            } else {
+                face.innerHTML =
+                    '<div class="msg-inner">' +
+                    '<p class="typewriter-text"><span class="caret"></span></p>' +
+                    '<p class="page-hint">turn the page</p>' +
+                    '</div>';
+            }
+            return face;
+        }
+
+        function buildBlankBackFace() {
+            var face = document.createElement('div');
+            face.className = 'face face-back parchment';
+            return face;
+        }
+
+        /* ============================================================
+           TYPEWRITER
+           ============================================================ */
+        function startTypewriter(leaf, message, isClosingLeaf) {
+            var textEl = leaf.querySelector('.typewriter-text');
+            var caret = leaf.querySelector('.caret');
+            var hint = leaf.querySelector('.page-hint');
+            var mark = leaf.querySelector('.closing-mark');
+
+            if (isSecondRead) {
+                textEl.textContent = '';
+                if (caret) caret.remove();
+                if (hint) hint.classList.remove('show');
+                if (mark) mark.classList.remove('show');
+                caret = document.createElement('span');
+                caret.className = 'caret';
+                textEl.appendChild(caret);
+            }
+
+            var existingText = textEl.textContent.replace(/\s/g, '');
+            if (existingText.length > 0 && !isSecondRead) {
+                if (isClosingLeaf) {
+                    if (mark) mark.classList.add('show');
+                } else {
+                    if (hint) hint.classList.add('show');
+                }
+                if (caret) caret.remove();
+                leaf.classList.remove('locked');
+                return;
+            }
+
+            var i = 0;
+
+            function typeNext() {
+                if (i < message.length) {
+                    var char = message[i];
+                    if (char !== '\n' && char !== ' ') {
+                        playTypeSound();
+                    }
+                    textEl.textContent = message.slice(0, i + 1);
+                    if (caret) textEl.appendChild(caret);
+                    i++;
+                    var delay = (char === '\n') ? PAUSE_AFTER_LINE_MS : TYPING_SPEED_MS;
+                    setTimeout(typeNext, delay);
+                } else {
+                    if (caret) caret.remove();
+                    if (isClosingLeaf) {
+                        if (mark) mark.classList.add('show');
+                    } else {
+                        if (hint) hint.classList.add('show');
+                    }
+                    leaf.classList.remove('locked');
+                }
+            }
+            typeNext();
+        }
+
+        function getMessage(index, isClosingLeaf) {
+            if (isClosingLeaf) {
+                return getFinalMessageForPhase(currentPhase);
+            } else {
+                return getMessageForPhase(currentPhase, index);
+            }
+        }
+
+        /* ============================================================
+           SURPRISE — long travel, effects fade out, moon reveal
+           ============================================================ */
+        function startSkySurprise() {
+            stopPhaseAudio();
+
+            if (sndLawliet) {
+                sndLawliet.pause();
+                sndLawliet.currentTime = 0;
+            }
+
+            bookWrap.classList.remove('visible', 'open');
+            bookWrap.classList.add('hidden');
+
+            if (sndWhoosh) {
+                sndWhoosh.currentTime = 0;
+                sndWhoosh.volume = 0.5;
+                sndWhoosh.play().catch(function() {});
+            }
+
+            var windInterval = setInterval(function() {
+                spawnWindStreaks();
+            }, 120);
+
+            wrapper.classList.add('camera-up');
+
+            setTimeout(function() {
+                clearInterval(windInterval);
+
+                if (sndWhoosh) {
+                    let fadeInterval = setInterval(function() {
+                        if (sndWhoosh.volume > 0.05) {
+                            sndWhoosh.volume = Math.max(0, sndWhoosh.volume - 0.05);
+                        } else {
+                            sndWhoosh.volume = 0;
+                            sndWhoosh.pause();
+                            sndWhoosh.currentTime = 0;
+                            clearInterval(fadeInterval);
+                        }
+                    }, 100);
+                }
+
+                setTimeout(function() {
+                    skyContent.classList.add('visible');
+                }, 1500);
+
+            }, 5000);
+
+            setTimeout(function() {
+                if (currentPhase === 4) {
+                    skyContent.classList.remove('visible');
+                    setTimeout(function() {
+                        showFinalLetter();
+                    }, 1500);
+                    return;
+                }
+
+                skyContent.classList.remove('visible');
+                wrapper.classList.remove('camera-up');
+
+                setTimeout(function() {
+                    currentPhase++;
+                    updateRuleFacesForPhase(currentPhase);
+                    isSecondRead = true;
+
+                    bookWrap.classList.remove('hidden');
+                    bookWrap.classList.add('visible');
+                    bookWrap.classList.remove('open');
+
+                    var allLeaves = book.querySelectorAll('.leaf');
+                    allLeaves.forEach(function(l) {
+                        if (Number(l.dataset.index) !== 0) {
+                            var textEl = l.querySelector('.typewriter-text');
+                            var hint = l.querySelector('.page-hint');
+                            var mark = l.querySelector('.closing-mark');
+                            if (textEl) textEl.textContent = '';
+                            if (hint) hint.classList.remove('show');
+                            if (mark) mark.classList.remove('show');
+                            var caret = l.querySelector('.caret');
+                            if (caret) caret.remove();
+                            if (textEl) {
+                                var newCaret = document.createElement('span');
+                                newCaret.className = 'caret';
+                                textEl.appendChild(newCaret);
+                            }
+                            l.classList.add('locked');
+                        }
+                    });
+
+                    var firstLeaf = book.querySelector('.leaf[data-index="0"]');
+                    if (firstLeaf) firstLeaf.classList.remove('locked');
+                    activeIndex = 0;
+
+                }, 1400);
+            }, 5000 + 1500 + 4000);
+        }
+
+        /* ============================================================
+           FINAL STAGE UNVEIL (Long Letter)
+           ============================================================ */
+        function showFinalLetter() {
+            var finalScreen = document.getElementById('final-screen');
+            finalScreen.style.opacity = '1';
+            finalScreen.style.pointerEvents = 'auto';
+
+            var finalLetterText =
+                `To my dearest Cara,\n\nFrom the moment you entered my life, every single rule of my universe completely changed. You showed me a love so raw, deep, and genuine, that no amount of words written across these pages could ever hope to fully capture it.\n\nWe've turned our chapters, shared our milestones, and built a bond that easily defies any distance between us. You are my anchor, my absolute safe space, and my greatest blessing.\n\nThank you for being precisely who you are, for loving me so perfectly, and for writing this incredible, beautiful story side by side with me.\n\nI love you infinitely, always and forever.`;
+
+            var txtContainer = document.getElementById('final-text');
+            var characterIndex = 0;
+
+            function typeFinal() {
+                if (characterIndex < finalLetterText.length) {
+                    var currentChar = finalLetterText[characterIndex];
+                    if (currentChar !== '\n' && currentChar !== ' ') {
+                        playTypeSound();
+                    }
+                    txtContainer.textContent = finalLetterText.slice(0, characterIndex + 1);
+                    characterIndex++;
+                    var currentDelay = (currentChar === '\n') ? PAUSE_AFTER_LINE_MS : TYPING_SPEED_MS;
+                    setTimeout(typeFinal, currentDelay);
+                }
+            }
+
+            setTimeout(typeFinal, 1200);
+        }
+
+        /* ============================================================
+           CLOSE BOOK
+           ============================================================ */
+        function closeBook() {
+            if (isClosing) return;
+            isClosing = true;
+
+            var allLeaves = book.querySelectorAll('.leaf');
+            allLeaves.forEach(function(l) { l.classList.add('locked'); });
+
+            var flippedLeaves = [];
+            allLeaves.forEach(function(l) {
+                if (l.classList.contains('flipped')) {
+                    flippedLeaves.push(l);
+                }
+            });
+            flippedLeaves.sort(function(a, b) {
+                return Number(b.dataset.index) - Number(a.dataset.index);
+            });
+
+            var total = flippedLeaves.length;
+            if (total === 0) {
+                setTimeout(function() {
+                    resetAndSurprise();
+                }, 300);
+                return;
+            }
+
+            if (sndPageTurn) {
+                sndPageTurn.currentTime = 0;
+                sndPageTurn.volume = 0.5;
+                sndPageTurn.play().catch(function() {});
+            }
+
+            var delayBetween = 300;
+            if (DEBUG_MODE) delayBetween = 20;
+
+            flippedLeaves.forEach(function(leaf, idx) {
+                setTimeout(function() {
+                    leaf.classList.remove('flipped');
+                    leaf.style.zIndex = 500 - Number(leaf.dataset.index);
+                    if (idx === flippedLeaves.length - 1) {
+                        setTimeout(function() {
+                            resetAndSurprise();
+                        }, 400);
+                    }
+                }, idx * delayBetween);
+            });
+        }
+
+        /* ============================================================
+           RESET & SURPRISE
+           ============================================================ */
+        function resetAndSurprise() {
+            bookWrap.classList.remove('open');
+            activeIndex = 0;
+
+            var allLeaves = book.querySelectorAll('.leaf');
+            allLeaves.forEach(function(l) {
+                var idx = Number(l.dataset.index);
+                l.style.zIndex = 500 - idx;
+                l.classList.remove('flipped');
+                if (idx === 0) {
+                    l.classList.remove('locked');
+                } else {
+                    l.classList.add('locked');
+                }
+                var hint = l.querySelector('.page-hint');
+                if (hint) hint.classList.remove('show');
+                var mark = l.querySelector('.closing-mark');
+                if (mark) mark.classList.remove('show');
+                var caret = l.querySelector('.caret');
+                if (caret) caret.remove();
+            });
+            flipZ = 1000;
+            isClosing = false;
+
+            startSkySurprise();
+        }
+
+        /* ============================================================
+           PAGE TURN
+           ============================================================ */
+        function handleLeafClick(leaf, index) {
+            if (isClosing) return;
+            if (leaf.classList.contains('locked') || leaf.classList.contains('flipped')) return;
+            if (Number(leaf.dataset.index) !== activeIndex) return;
+
+            if (index === RULES.length + 1 && !leaf.classList.contains('flipped')) {
+                closeBook();
+                return;
+            }
+
+            if (index > RULES.length) return;
+
+            // ---- BOOK OPENING (cover clicked) ----
+            if (index === 0) {
+                if (currentPhase >= 2 && currentPhase <= 4) {
+                    startPhaseAudio(currentPhase);
+                }
+            }
+
+            if (sndPageTurn) {
+                sndPageTurn.currentTime = 0;
+                sndPageTurn.play().catch(function() {});
+            }
+
+            leaf.classList.add('flipped');
+            leaf.style.zIndex = flipZ++;
+
+            if (index === 0) {
+                bookWrap.classList.add('open');
+            }
+
+            activeIndex++;
+
+            var nextLeaf = book.querySelector('.leaf[data-index="' + (index + 1) + '"]');
+            if (nextLeaf) {
+                var nextIsClosingLeaf = (index + 1) > RULES.length;
+                var message = getMessage(index, nextIsClosingLeaf);
+
+                var halfFlip = FLIP_DURATION_MS * 0.5;
+                if (DEBUG_MODE) halfFlip = 50;
+                setTimeout(function() {
+                    startTypewriter(nextLeaf, message, nextIsClosingLeaf);
+                }, halfFlip);
+            }
+        }
+    </script>
+</body>
+</html>
