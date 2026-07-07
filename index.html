@@ -123,7 +123,7 @@
         }
 
         /* ============================================================
-           STAGE & WRAPPER — long, smooth camera tilt
+           STAGE & WRAPPER, long, smooth camera tilt
            ============================================================ */
         #stage {
             position: fixed;
@@ -164,7 +164,7 @@
         }
 
         /* ============================================================
-           SKY CONTENT — full, beautiful, fills viewport
+           SKY CONTENT, full, beautiful, fills viewport
            ============================================================ */
         #sky-content {
             position: absolute;
@@ -225,7 +225,7 @@
             z-index: 2;
             transition: background 4s ease, box-shadow 4s ease;
         }
-        /* Blood moon — the moon curdles from white/blue to red as the sky bleeds (phase 4) */
+        /* Blood moon, the moon curdles from white/blue to red as the sky bleeds (phase 4) */
         .moon.blood-moon {
             background: radial-gradient(circle at 30% 30%, #ff5a4d, #7a0f16);
             box-shadow:
@@ -234,7 +234,7 @@
                 0 0 180px rgba(90, 8, 12, 0.2);
         }
 
-        /* Text curdle — the message slowly bleeds toward blood-red, still and unnerving (no jitter) */
+        /* Text curdle, the message slowly bleeds toward blood-red, still and unnerving (no jitter) */
         .sky-message .main,
         .sky-message .sub {
             transition: filter 4s ease, color 4s ease;
@@ -247,7 +247,7 @@
             -webkit-text-fill-color: rgba(200, 40, 40, 0.85);
         }
 
-        /* Ghost double — a faint, slightly-offset duplicate that lingers behind the text, like something else is there */
+        /* Ghost double, a faint, slightly-offset duplicate that lingers behind the text, like something else is there */
         .sky-message {
             position: relative;
         }
@@ -376,7 +376,7 @@
         }
 
         /* ============================================================
-           VERTICAL WIND STREAKS — fade out naturally
+           VERTICAL WIND STREAKS, fade out naturally
            ============================================================ */
         .wind-streak {
             position: absolute;
@@ -401,7 +401,7 @@
         }
 
         /* ============================================================
-           BOOK CONTAINER — properly centered, no glow
+           BOOK CONTAINER, properly centered, no glow
            ============================================================ */
         #book-wrap {
             position: absolute;
@@ -552,7 +552,7 @@
         }
 
         /* ============================================================
-           TYPOGRAPHY & CONTENT (inside book) — with custom fonts
+           TYPOGRAPHY & CONTENT (inside book), with custom fonts
            ============================================================ */
         .rule-inner,
         .msg-inner {
@@ -772,7 +772,7 @@
         }
 
         /* ============================================================
-           PHASE FLASH — instant color slam that slowly fades to black
+           PHASE FLASH, instant color slam that slowly fades to black
            ============================================================ */
         #phase-flash {
             position: absolute;
@@ -877,13 +877,13 @@
     <!-- phase audio -->
     <audio id="snd-suspicious" src="Sounds/suspicious.mp3" preload="auto"></audio>
     <audio id="snd-suspicious2" src="Sounds/suspicious2.mp3" preload="auto"></audio>
-    <audio id="snd-lawliet2" src="Sounds/lawliet2.mp3" preload="auto" loop></audio>
-    <audio id="snd-lawliet3" src="Sounds/lawliet3.mp3" preload="auto" loop></audio>
-    <audio id="snd-lawliet4" src="Sounds/lawliet4.mp3" preload="auto" loop></audio>
+    <audio id="snd-lawliet2" src="Sounds/lawliet2.MP3" preload="auto" loop></audio>
+    <audio id="snd-lawliet3" src="Sounds/lawliet3.MP3" preload="auto" loop></audio>
+    <audio id="snd-lawliet4" src="Sounds/lawliet4.MP3" preload="auto" loop></audio>
 
     <!-- final-letter music -->
-    <audio id="snd-loveair1" src="Sounds/loveisintheair-pt1.mp3" preload="auto"></audio>
-    <audio id="snd-loveair2" src="Sounds/loveisintheair-pt2.mp3" preload="auto"></audio>
+    <audio id="snd-loveair1" src="Sounds/loveisintheair-pt1.MP3" preload="auto"></audio>
+    <audio id="snd-loveair2" src="Sounds/loveisintheair-pt2.MP3" preload="auto"></audio>
 
     <!-- looping typing blip -->
     <audio id="snd-typeblip" src="Sounds/type-blip.mp3" preload="auto" loop></audio>
@@ -897,7 +897,7 @@
                 <div class="moon"></div>
                 <div class="sky-message">
                     <div class="main">Happy 5 monthsarry</div>
-                    <div class="sub">to my baby — you said you loved this anime so..</div>
+                    <div class="sub">to my baby, you said you loved this anime so..</div>
                     <div class="ghost-double" aria-hidden="true">
                         <div class="main"></div>
                         <div class="sub"></div>
@@ -932,9 +932,9 @@
 
     <script>
         /* ============================================================
-           🎯  PHASE START  —  change to 2, 3, 4, or "end"
+           🎯  PHASE START ,  change to 2, 3, 4, or "end"
            ============================================================ */
-        const PHASESTART = "end"; // 1, 2, 3, 4, or "end"
+        const PHASESTART = 1; // 1, 2, 3, 4, or "end"
 
         // ============================================================
         // DEBUG MODE
@@ -969,21 +969,21 @@
             document.head.appendChild(style);
         }
 
-        // ============================================================
-        // PHASE 1 — FIRST READ (confession)
+       // ============================================================
+        // PHASE 1, FIRST READ (confession)
         // ============================================================
         const RULES = [{
             roman: "1",
             ruleText: "The human whose heart is written in this note shall fall for him, entirely, and forever.",
-            message: `Wait... it's not a Death Note.\nIt's a Love Note.\n\nHappy 5 Months to the girl who\ncompletely changed my world.`
+            message: `Wait... it's not a Death Note.\nIt's a Love Note, and I changed\nthe rules completely para sa'yo 😘\n\nHappy 5 Months, my baby,\nmy loveyy tootoot!`
         }, {
             roman: "2",
             ruleText: "This note will not take effect unless the writer's feelings are true, and freely given.",
-            message: `Every day with you is my\nfavorite day.\n\nI fall for you again in a\nhundred small ways, every\nsingle time.`
+            message: `Every day with you is something\nI look forward to every single day.\n\nL might be a genius at solving\nmysteries, pero he could never\ndecipher how you won my heart.`
         }, {
             roman: "3",
             ruleText: "The one who writes this name shall never let it be erased, nor forgotten, nor replaced.",
-            message: `I love you, ${HER_NAME}.\nMore today than yesterday,\nand not nearly as much as\nI will tomorrow.`
+            message: `I love you, ${HER_NAME}.\nRyuk needed apples, pero sa totoo lang,\nall I need to stay happy in this\nworld is your voice, your presence,\nand basically every part of you baby.`
         }];
 
         const LAST_RULE = {
@@ -991,76 +991,76 @@
             ruleText: "No note, no rule, and no rewritten fate could ever undo how I feel about you."
         };
         const FINAL_MESSAGE =
-            `Happy 5 Months, ${HER_NAME}.\n\nTo many more rules written,\nand every one of them about you.\n\nForever yours.`;
+            `Happy 5 Monthsary, ${HER_NAME}.\n\nYou ARE the ONLY name I ever want\nwritten in the book of my life,\ncovering these pages until the\nvery damn fucking end.\n\nForever yours.`;
 
         // ============================================================
-        // PHASE 2 — SECOND READ (promise)
+        // PHASE 2, SECOND READ (promise)
         // ============================================================
         const RULES_SECOND = [{
             roman: "1",
             ruleText: "The heart that reads these words a second time is bound to find new meaning.",
-            message: `You came back.\nI was hoping you would.\n\nThere's something about this book,\nand about you, that makes me\nwant to read it again and again.`
+            message: `You clicked it again.\nI was hoping you would.\n\nI put this here to be our own\nlittle world that you can click on\nwhenever you want to remember\nhow much I love you.`
         }, {
             roman: "2",
             ruleText: "This note shall reveal a deeper truth to those who return to it.",
-            message: `Every page we turn together\nwrites a new story.\n\nI don't just love you in the past tense.\nI love you in the present,\nand I'll love you in every\nfuture re-read.`
+            message: `Thank you for staying by my side\nthrough the ups and downs,\nand for being so committed sa atin.\n\nHolding my hand through everything,\nwhether it's a chill moment or chaotic\nin-game or in real life, you never\nreally let go of me.`
         }, {
             roman: "3",
             ruleText: "The name written here is not just a name, it is a promise renewed.",
-            message: `I love you, ${HER_NAME}.\nAnd I will keep choosing you,\nevery single day,\nfor as long as these pages exist.`
+            message: `I love you, ${HER_NAME}.\nEven if I cried during our fight,\nit doesn't mean I'm giving up.\n\nI will never get tired of fighting\nfor us, no matter how harsh\nour arguments get sometimes.`
         }];
 
         const FINAL_MESSAGE_SECOND =
-            `Welcome back, my love.\n\nEvery time I open this book,\nI fall for you all over again.\n\nForever and always,\nyours.`;
+            `Welcome back, my love.\n\nIt just proves to me that what we\nhave isn't fragile; it's solid,\ndeeply rooted, and can get through\nabsolutely anything.\n\nForever and always, yours.`;
 
         // ============================================================
-        // PHASE 3 — THIRD READ (homecoming)
+        // PHASE 3, THIRD READ (homecoming)
         // ============================================================
         const RULES_THIRD = [{
             roman: "1",
             ruleText: "The heart that returns a third time discovers what it was always searching for.",
-            message: `Three times now.\nAnd every time, I find you\nwaiting for me.\n\nThere's no place I'd rather be.`
+            message: `Three times now.\nAnd every time you come back,\nI love you even more.\n\nNo matter how chaotic the world gets,\nwhen it comes to you, all I'm seeing\nis my safe space, my home, and my world.`
         }, {
             roman: "2",
             ruleText: "This note reveals not what you want, but what you already have.",
-            message: `I don't need to write new rules.\nI just need to remember\nwhat I've known all along:\n\nYou are my home.`
+            message: `I don't need to write new rules.\nI just need to remember\nwhat I've known all along:\n\nBeing loved by you is the greatest thing\nthat ever happened to me. All my\noverthinking completely disappears.`
         }, {
             roman: "3",
-            ruleText: "The name written here is not a wish — it is a homecoming.",
-            message: `I love you, ${HER_NAME}.\nNot for what you give me,\nbut for who you are.\nAnd who you are is everything.`
+            ruleText: "The name written here is not a wish, it is a homecoming.",
+            message: `I love you, ${HER_NAME}.\nI hope as time goes on, you feel\nso safe and loved with me that you\nnever have to doubt it, even for a second.`
         }];
 
         const FINAL_MESSAGE_THIRD =
-            `Three times I've opened this book.\nThree times I've fallen for you.\n\nIt never gets old.\nIt only gets truer.\n\nI'm not going anywhere.`;
+            `Three times I've opened this book.\nI want our love to feel like a warm\nblanket on a cold night—a constant\nassurance na hawak mo ang puso ng tao\nna hinding-hindi ka bibiguin.\n\nI'm not going anywhere.`;
 
         // ============================================================
-        // PHASE 4 — FOURTH READ (eternity)
+        // PHASE 4, FOURTH READ (eternity)
         // ============================================================
         const RULES_FOURTH = [{
             roman: "1",
             ruleText: "The final rule is this: love is not a note to be written, but a life to be lived.",
-            message: `There are no more rules.\nOnly us.\n\nEvery word I've written\nhas led me here.`
+            message: `Just like in the movie Obsession,\nBear's wish for Nikki...\n\nMinus all the crazy parts, just pure\nand real love. You are genuinely\nmy whole universe and my ultimate choice.`
         }, {
             roman: "2",
             ruleText: "This note does not end. It echoes in every moment you choose me.",
-            message: `The ink will never dry.\nThe pages will never close.\n\nBecause you are not a chapter,\nyou are the whole book.`
+            message: `I want to give you that exact same\nfull focus and care where you never\nhave to worry or be scared about anything.\n\nReplacing it with the most gentle,\nheartwarming, and protective care.`
         }, {
             roman: "3",
-            ruleText: "The name written here is not just my heart — it is my forever.",
-            message: `I love you, ${HER_NAME}.\nAnd I will love you\nfor as long as forever\nallows me to.`
+            ruleText: "The name written here is not just my heart, it is my forever.",
+            message: `I love you, ${HER_NAME}.\nI want to spend my whole life making\nsure you know that inside and out,\nyou are, and will always be,\nmy number one priority, no matter what.`
         }];
 
         const FINAL_MESSAGE_FOURTH =
-            `Four times.\nCountless more to come.\n\nYou are not just a chapter in my book —\nyou are the whole story.\n\nForever yours,\nand only yours.`;
+            `Four times.\nCountless more to come.\n\nEvery single day with you just\nproves more and more how important\nyou are to me.\n\nForever yours,\nand only yours.`;
 
         /* ============================================================
            SKY MESSAGES PER PHASE
            ============================================================ */
         const SKY_MESSAGES = {
-            1: { main: 'Happy 5 monthsarry', sub: 'to my baby — you said you loved this anime so..' },
-            2: { main: 'You came back to me', sub: 'and I fell for you all over again' },
-            3: { main: 'Home is wherever you are', sub: 'and I always find my way back to you' },
-            4: { main: 'Forever begins right now', sub: 'and it will never, ever end' }
+            1: { main: 'Happy 5th Monthsaryyy!', sub: 'hehe I love you baby, you said you liked this anime so.. ()' },
+            2: { main: 'Whether in-game or in real life...', sub: 'you\'re still the only one I want to protect against everything' },
+            3: { main: 'You are my safe space and my anchor', sub: 'every single beat of my heart is for you, wholly and completely' },
+            4: { main: 'Full focus, minus all the crazy parts', sub: 'Happy 5 Months, Cara. Forever and always, yours.' }
         };
 
         /* ============================================================
@@ -1368,7 +1368,7 @@
         }
 
         /* ============================================================
-           SEQUENCE — first appearance, book fades in (normal mode)
+           SEQUENCE, first appearance, book fades in (normal mode)
            ============================================================ */
         function runSequence() {
             if (IS_MOBILE) return;
@@ -1425,7 +1425,7 @@
         }
 
         /* ============================================================
-           GO TO FINAL SCREEN — used for "end" mode
+           GO TO FINAL SCREEN, used for "end" mode
            ============================================================ */
         let finalScreenOpened = false;
 
@@ -1534,7 +1534,7 @@
         }
 
         /* ============================================================
-           LEAF FACTORY — phase‑aware (only used in normal mode)
+           LEAF FACTORY, phase‑aware (only used in normal mode)
            ============================================================ */
         var flipZ = 1000;
         var activeIndex = 0;
@@ -1630,7 +1630,7 @@
         }
 
         /* ============================================================
-           TYPEWRITER — ORIGINAL STYLE, with locking and blip
+           TYPEWRITER, ORIGINAL STYLE, with locking and blip
            ============================================================ */
         function startTypewriter(leaf, message, isClosingLeaf) {
             // Prevent re-entry
@@ -1754,7 +1754,7 @@
         }
 
         /* ============================================================
-           SURPRISE — long travel, effects fade out, moon reveal (normal mode)
+           SURPRISE, long travel, effects fade out, moon reveal (normal mode)
            ============================================================ */
         function startSkySurprise() {
             stopPhaseAudio();
@@ -1928,26 +1928,26 @@
             var finalCard = document.getElementById('final-card');
             if (finalCard) finalCard.classList.add('show');
 
-            // Now you can write it as one block of text!
-            // Use \n only when you want a new paragraph.
             var finalLetterText = 
-        `To my dearest Cara,
+            `To my dearest Cara,
 
-        Happy 5th Monthsary, my love. Five months of having you in my life, and honestly, every single rule of my universe has completely changed. I'm writing this to you because I wanted to create something completely ours, a quiet space where I could try—even if words will always fall short—to tell you just how much you mean to me.
+            Happy 5th Monthsaryyy, my loveyy tootoot and holy shit.. five months in on having you in my life, and honestly baby, every single rule of my universe has completely changed bc ever since you came into my world, you’ve basically rewritten everything na i thought na alam ko about sa happiness na yan, and js turning those normal days to something thats to be looking foward everyday for thoughh speakinggggggg of completely changing the rules of the universe, Alam ko on how much you love *Death Note* and that solidddd 9/10 that we talked about, it just really got me thinking. What if yk a notebook capable of altering reality and rewriting human fate actually dropped sa langit on my own hands.. honestly i wouldn’t care about changing the world or playing god at all kasi duhh alam naman natin kung ano talagang ginagawa ng notebook na yan, pero since your name is literally all over this website ediii iniba ko nalang ung mga rules, that easy right😘 andd the exact second your name touched these pages, it basically js instantly turned into a Love Note na already and instead of bringing harm, it 100% gurantees a lifetime of absolute peace, happiness, infinite laughs and many other memories for us to share and yeah speaking of the anime L might be a genius at solving the very very hard mysteries, pero i am confident about this one thing bc he could never decipher the way my heart beats just for you.. you’re literally the only one who completely figured me out and unlocked exactly who i am. and baby, need ni ryuk ng apples, and compared to mine all i needed was you, your voice, your presence and basically every part of you baby. bc you ARE the ONLY name i ever want written in the book of my life, covering these every pages from now until the very damn fucking end. Cara, my baby, i am writing this to you kasi as always i will always want to create something thats COMPLETELY ours, and a quiet space where i could try, even if words will always fall short and to tell you just how much you damn mean to me. Nilagay ko 'to, and gusto ko na always in this specific corner of the internet to be a permanent sanctuary for the both of us, a place you can always click on whenever you need a reminder of how deeply you are anchored in my very soul.
 
-        First, I want to say thank you. Thank you for staying by my side through absolutely everything, through every single up and down, and for being so deeply committed to us. I know I can be a handful sometimes, and I am so incredibly sorry for the moments when I am hard to deal with or when things get overwhelming. But please know that through every single second of these past five months, I have been so deeply, genuinely happy. Being loved by you is the greatest thing that has ever happened to me.
+            First, i want to say thank you. Thank you for staying by my side through absolutely everything, through every single up and down, and for being so deeply committed to us. Sobrang laking bagay sa akin nun baby seryoso. It takes an incredibly strong, beautiful, and patient heart para mahalin ang isang katulad ko, and i promise never to take a single second of it for granted. Hawak-hawak mo lang yung kamay ko, mapa-chill man yung moment o mapuno ng gulo sa laro man o sa totoong buhay, hindi mo talaga ako binitawan. At yun ang pinakamagandang gift na natanggap ko sa buong buhay ko, no joke cara. i know i can be a handful sometimes, and im sorry for being anxious at some things, and i really appreciate you reassuring me when i overthink badly. The thought of causing you even a moment of stress or lungkot, grabe, pinalalambot talaga nun yung puso ko sa lungkot kasi you're the last person i ever want to hurt. Thank you for looking past my flaws, tinatanggap mo pa rin ako kahit ganito ako, and for creating a safe space kung saan feeling ko super safe ako mag-grow at matuto kasama ka. But please know that through every single second of these past five months, i have been so deeply, genuinely happy. Being loved by you is the greatest thing that has ever happened to me. Yung pakiramdam na minamahal mo ako? Sobrang pure, to the point na nawawala lahat ng worries at overthinking ko. Doon ko talaga na-realize kung gaano ako ka-swerte na akin ka, as in LITERALLY the luckiest guy in the universe.
 
-        I want to be completely honest and vulnerable with you about something. Just today, right before our monthsary, when we were both playing and we had that fight... it hurt so badly. When we were arguing and those mean things were said in the heat of anger, I couldn't help but cry. It wasn't just because of the argument itself, Cara. The real reason my heart broke and the tears wouldn't stop was because right at that exact moment, while we were playing, I was secretly working on this very website for you. I was right here, crafting these pages and writing this letter, trying to build something beautiful to surprise you and make you smile. It felt so incredibly bitter and overwhelming to be pouring my heart into a celebration of us while we were hurting. It broke me because all I wanted was to make you happy.
+            i want to be completely honest and vulnerable with you about something. Just today, right before our monthsary, when we were both playing and we had that fight... it hurt so badly. Ang bigat bigat bigla sa pakiramdam, love. Na-shock talaga ako kasi ikaw yung pinakahuling tao na gusto kong maka-away o magkaroon ng gap lalo na ngayon. When we were arguing and those mean things were said in the heat of anger, i couldn't help but cry. It wasn't just because of the argument itself, Cara. The real reason my heart broke and the tears wouldn't stop was because right at that exact moment, while we were playing, i was secretly working on this very website for you. Habang magka-away tayo at may issue sa game, naka-open sa background tabs ko yung mga codes, design layouts, at yung mga letters na isinusulat ko para sa'yo. i was right here, crafting these pages and writing this letter, trying to build something beautiful to surprise you and make you smile. Iniiyakan ko yung katotohanan na binabasa ko yung pangalan mo at nagbubuhos ako ng pagmamahal dito sa code, pero at the same time, sumasakit yung puso ko sa nangyayari sa atin. Sobrang magkaibang mundo yung nag-collide, and it felt so fucking bad. It felt so incredibly bitter and overwhelming to be pouring my heart into a celebration of us while we were hurting. It broke me because all i wanted was to make you happy. Ang goal ko lang naman talaga para sa araw na 'to is mapangiti ka at pasayahin ka ng sobra, kaya nung naramdaman kong parang nag-fail ako, grabe, nanghina talaga ako and napanic na ewan.
 
-        But even in that heavy moment, it only made me realize how much I never want to lose you. It proved to me how deeply I care, and how much our bond matters to me. Arguments will happen, and we will face rough days, but the fact that you are still here, that we always find our way back, and that you stay committed to us through the storm means the entire world to me. You are my safe space, my anchor, and my home.
+            But even in that heavy moment, it only made me realize how much i never want to lose you. Na-realize ko na isang mundo na wala ka, o isang buhay kung saan hahayaan lang natin na sira ang lahat, hindi ko talaga kayang tanggapin yun. i will never accept that reality. It proved to me how deeply i care, and how much our bond matters to me. Alam ko naman na pinag-usapan natin nung isang araw yung side mo kapag galit ka, and i know you can get really harsh talaga pagdating sa ganun. Sabi ko naman sayo na kaya kong tiisin at tanggapin lahat ng yun, and i mean it. Kaya kahit na umiyak ako, hindi ibig sabihin nun na mahina ako or na sumusuko na ako sa atin. Puso ko lang talaga yung nasasaktan sa moment na yun kasi mahal na mahal kita, pero hinding-hindi ako mapapagod na ipaglaban ka. Arguments will happen, and we will face rough days, but the fact that you are still here, that we always find our way back, and that you stay committed to us through the storm means the entire world to me. Doon ko napatunayan na hindi fragile yung meron tayo; matibay 'to, deeply rooted, at kayang lagpasan kahit ano. Every time na nagkakaayos tayo at pinipili natin ang isa't isa pagkatapos ng gulo, lalo lang lumalalim at nadadagdagan yung pagmamahal ko sa'yo. You are my safe space, my anchor, and my home. Kahit gaano kagulo o ka-toxic ang mundo sa labas, basta pagdating sa'yo, all i'm seeing is my safe space, my home, and my world.
 
-        If I could have one absolute wish for us—kind of like that movie Obsession where Bear wishes for Nikki to love him more than anyone else in the world, but without any of the craziness, just pure, wholesome devotion... my wish would be this: 
+            If i could have one absolute wish for us, kind of like that movie Obsession where Bear wishes for Nikki to love him more than anyone else in the world, but without any of the craziness, just pure, wholesome devotion... my wish would be this:
 
-        I wish that as time goes on, your heart finds a love in me so deep, so safe, and so completely fulfilling that you never have to wonder what it feels like to be entirely cherished. I wish for me to be the person who makes you feel safer, happier, and more loved than anyone else ever could, and I wish for us to keep choosing each other, over and over again, growing closer with every single chapter we write. I want to spend forever making sure you know that you are my absolute everything.
+            i wish that as time goes on, your heart finds a love in me so deep, so safe, and so completely fulfilling that you never have to wonder what it feels like to be entirely cherished. Gusto ko yung love natin feels like a warm blanket tuwing malamig ang gabi, isang constant assurance na hawak mo ang puso ng isang tao na hinding-hindi ka bibiguin o sasaktan. i wish for me to be the person who makes you feel safer, happier, and more loved than anyone else ever could, and i wish for us to keep choosing each other, over and over again, growing closer with every single chapter we write. Sana sa future natin, punong-puno tayo ng mga milestones na babalikan natin habang naka-ngiti ng sobrang laki, knowing na nalagpasan natin lahat ng struggles ng magkahawak-kamay. i want to spend forever making sure you know that you are my absolute everything. Every single beat of my heart is a reminder na sa'yo lang ako, wholly and completely, wala nang iba.
 
-        Thank you for these beautiful five months, Cara. Thank you for your patience, your commitment, and your love. 
+            Alam ko na medyo wild at intense yung movie na yun, pero shit man kung tatanggalin mo yung pagka-thriller niya, there is a core feeling underneath na sobrang ganda at romantic, yung tipong ikaw yung buong uniberso ng isang tao, yung ultimate choice nila, at yung nag-iisang tao na poprotektahan nila laban sa lahat. Ganyang-ganyan katindi yung tibok ng puso ko para sa'yo. i want to give you that exact same fierce, unwavering focus, pero aalisin natin lahat ng takot o bigat. Papalitan natin ng pinaka-gentle, heartwarming, at protective care na kaya kong ibigay. Gusto kong mahalin ka sa pinaka-wholesome na paraan, yung laging mag-a-uplift at magpapakalma sa'yo kapag pagod ka na o stress sa school or anything. i want you to feel so completely wrapped up sa pagmamahal ko na hinding-hindi mo kailangang hulaan kung gaano ka kahalaga, kasi alam mo naman na inside and out, you are, and will always be, my number one priority, no matter what.
 
-        Happy 5 Monthsary, my baby. Forever and always, yours.`;
+            Thank you for these beautiful five months, Cara. Thank you for your patience, your commitment, and your love. You have honestly made me a better version of myself, at bawat araw na kasama kita, mas lalo kong napatutunayan kung gaano ka ka-mahalaga sa akin.
+
+            Happy 5 Monthsary, my baby, my tootoot, my love, my cutiebaby, my Cara. Forever and always, yours.`;
 
             var txtContainer = document.getElementById('final-text');
             
