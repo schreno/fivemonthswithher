@@ -525,7 +525,7 @@
                     transparent 1.7em,
                     rgba(70, 50, 20, 0.11) 1.7em,
                     rgba(70, 50, 20, 0.11) calc(1.7em + 1px)),
-                radial-gradient(ellipse at center, transparent 52%, rgba(60, 40, 15, 0.30) 100%);
+                radial-gradient(ellipse at center, transparent 52%, rgba(60, 40, 15, 0.235) 100%);
             mix-blend-mode: multiply;
         }
 
@@ -754,11 +754,36 @@
             overflow-y: auto;          /* Enables scroll */
             scrollbar-width: none;     /* Hide scrollbar Firefox */
             -ms-overflow-style: none;  /* Hide scrollbar IE/Edge[cite: 1] */
+
+            /* ADD THESE LINES TO MAKE IT UNSELECTABLE */
+            -webkit-user-select: none;  /* Safari */
+            -moz-user-select: none;     /* Firefox */
+            -ms-user-select: none;      /* IE10+/Edge */
+            user-select: none;          /* Standard */
         }
 
         /* Hides scrollbar for Chrome, Safari, and Opera */
         #final-text::-webkit-scrollbar {
             display: none;
+        }
+
+        /* RICH TEXT inside the final letter.
+           DeathFont2 only ships a "normal" weight, so plain <b> can look weak
+           (just browser faux-bold) — add a soft glow so emphasis still reads clearly. */
+        #final-text b,
+        #final-text strong {
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 0 8px rgba(255, 80, 90, 0.55);
+        }
+        #final-text i,
+        #final-text em {
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.95);
+        }
+        #final-text u {
+            text-decoration-color: rgba(255, 255, 255, 0.6);
+            text-underline-offset: 3px;
         }
         /* ============================================================
            VIGNETTE (fixed over viewport)
@@ -930,11 +955,13 @@
         <div id="vignette"></div>
     </div>
 
+    <script src="final_letter.js"></script>
+
     <script>
         /* ============================================================
            🎯  PHASE START ,  change to 2, 3, 4, or "end"
            ============================================================ */
-        const PHASESTART = 1; // 1, 2, 3, 4, or "end"
+        const PHASESTART = "end"; // 1, 2, 3, 4, or "end"
 
         // ============================================================
         // DEBUG MODE
@@ -951,6 +978,7 @@
         let PAUSE_AFTER_LINE_MS = 600;
         let PAUSE_AFTER_DOT_MS = 500;
         let PAUSE_AFTER_COMMA_MS = 250;
+        let PAUSE_AFTER_BAR_MS = 350; // "|" invisible pause, used in the final letter
         let FLIP_DURATION_MS = 1700;
 
         if (DEBUG_MODE) {
@@ -959,6 +987,7 @@
             PAUSE_AFTER_LINE_MS = 20;
             PAUSE_AFTER_DOT_MS = 20;
             PAUSE_AFTER_COMMA_MS = 20;
+            PAUSE_AFTER_BAR_MS = 20;
             FLIP_DURATION_MS = 200;
             var style = document.createElement('style');
             style.textContent = `
@@ -970,97 +999,97 @@
         }
 
        // ============================================================
-        // PHASE 1, FIRST READ (confession)
+        // PHASE 1 ,  FIRST READ (confession)
         // ============================================================
         const RULES = [{
             roman: "1",
-            ruleText: "The human whose heart is written in this note shall fall for him, entirely, and forever.",
-            message: `Wait... it's not a Death Note.\nIt's a Love Note, and I changed\nthe rules completely para sa'yo 😘\n\nHappy 5 Months, my baby,\nmy loveyy tootoot!`
+            ruleText: "The human whose name is written here is stuck with him entirely and forever.",
+            message: `Wait... it's not a Death Note.\nIt's a Love Note, and I actually changed\nthe rules completely para sa'yo 😘\n\nHappy 5 Months, my baby!`
         }, {
             roman: "2",
-            ruleText: "This note will not take effect unless the writer's feelings are true, and freely given.",
-            message: `Every day with you is something\nI look forward to every single day.\n\nL might be a genius at solving\nmysteries, pero he could never\ndecipher how you won my heart.`
+            ruleText: "This note only works if the writer genuinely means every single word.",
+            message: `Honestly, waking up and knowing I get\nto talk to you is my favorite part of\nevery single day.\n\nI fall for you all over again in a\nhundred tiny ways, all the time.`
         }, {
             roman: "3",
-            ruleText: "The one who writes this name shall never let it be erased, nor forgotten, nor replaced.",
-            message: `I love you, ${HER_NAME}.\nRyuk needed apples, pero sa totoo lang,\nall I need to stay happy in this\nworld is your voice, your presence,\nand basically every part of you baby.`
+            ruleText: "Once your name is written down, it can never be erased or replaced.",
+            message: `I love you, ${HER_NAME}.\nWay more than yesterday, but definitely\nnot as much as I'm gonna love you\ntomorrow.`
         }];
 
         const LAST_RULE = {
             label: "Last Rule",
-            ruleText: "No note, no rule, and no rewritten fate could ever undo how I feel about you."
+            ruleText: "No rewritten rules or alternate timelines could ever change how I feel about you."
         };
         const FINAL_MESSAGE =
-            `Happy 5 Monthsary, ${HER_NAME}.\n\nYou ARE the ONLY name I ever want\nwritten in the book of my life,\ncovering these pages until the\nvery damn fucking end.\n\nForever yours.`;
+            `Happy 5 Months, ${HER_NAME}.\n\nTo a lot more rules written down,\nand literally every single one of them\nis about you.\n\nForever yours.`;
 
         // ============================================================
-        // PHASE 2, SECOND READ (promise)
+        // PHASE 2 ,  SECOND READ (promise)
         // ============================================================
         const RULES_SECOND = [{
             roman: "1",
-            ruleText: "The heart that reads these words a second time is bound to find new meaning.",
-            message: `You clicked it again.\nI was hoping you would.\n\nI put this here to be our own\nlittle world that you can click on\nwhenever you want to remember\nhow much I love you.`
+            ruleText: "Opening this a second time means you're definitely hooked.",
+            message: `Look who clicked it again!\nI was hoping you'd come back.\n\nThere's just something about this site\nand about you that keeps bringing you\nback to read it over and over.`
         }, {
             roman: "2",
-            ruleText: "This note shall reveal a deeper truth to those who return to it.",
-            message: `Thank you for staying by my side\nthrough the ups and downs,\nand for being so committed sa atin.\n\nHolding my hand through everything,\nwhether it's a chill moment or chaotic\nin-game or in real life, you never\nreally let go of me.`
+            ruleText: "Coming back always shows a deeper side to what's written down.",
+            message: `Every single day we spend together\nfeels like we're writing our own story.\n\nAnd just so you know, I don't just love\nyou right now, I'm gonna love you in\nevery single chapter ahead of us.`
         }, {
             roman: "3",
-            ruleText: "The name written here is not just a name, it is a promise renewed.",
-            message: `I love you, ${HER_NAME}.\nEven if I cried during our fight,\nit doesn't mean I'm giving up.\n\nI will never get tired of fighting\nfor us, no matter how harsh\nour arguments get sometimes.`
+            ruleText: "Your name being here is a reminder that I choose you over and over.",
+            message: `I love you, ${HER_NAME}.\nAnd I'm always gonna keep choosing you,\nevery single day, for as long as\nthis code even exists.`
         }];
 
         const FINAL_MESSAGE_SECOND =
-            `Welcome back, my love.\n\nIt just proves to me that what we\nhave isn't fragile; it's solid,\ndeeply rooted, and can get through\nabsolutely anything.\n\nForever and always, yours.`;
+            `Welcome back, my love.\n\nEvery time you open this up,\nI just fall for you all over again.\n\nForever and always,\nyours.`;
 
         // ============================================================
-        // PHASE 3, THIRD READ (homecoming)
+        // PHASE 3 ,  THIRD READ (homecoming)
         // ============================================================
         const RULES_THIRD = [{
             roman: "1",
-            ruleText: "The heart that returns a third time discovers what it was always searching for.",
-            message: `Three times now.\nAnd every time you come back,\nI love you even more.\n\nNo matter how chaotic the world gets,\nwhen it comes to you, all I'm seeing\nis my safe space, my home, and my world.`
+            ruleText: "If you return a third time, you already know what you're looking for.",
+            message: `Three times now!\nAnd every single time, I just find you\nhere reading this.\n\nHonestly, there's nowhere else\nI'd rather be.`
         }, {
             roman: "2",
-            ruleText: "This note reveals not what you want, but what you already have.",
-            message: `I don't need to write new rules.\nI just need to remember\nwhat I've known all along:\n\nBeing loved by you is the greatest thing\nthat ever happened to me. All my\noverthinking completely disappears.`
+            ruleText: "This layout doesn't show you what you want, it reminds you of what you already have.",
+            message: `I don't even need to write new rules.\nI just need to look at what's been right\nin front of me the whole time:\n\nYou're my safe space, baby.`
         }, {
             roman: "3",
-            ruleText: "The name written here is not a wish, it is a homecoming.",
-            message: `I love you, ${HER_NAME}.\nI hope as time goes on, you feel\nso safe and loved with me that you\nnever have to doubt it, even for a second.`
+            ruleText: "Your name here isn't just text anymore—it's exactly where I belong.",
+            message: `I love you, ${HER_NAME}.\nNot because of what you give me, but\njust for exactly who you are.\nAnd you're literally my everything.`
         }];
 
         const FINAL_MESSAGE_THIRD =
-            `Three times I've opened this book.\nI want our love to feel like a warm\nblanket on a cold night—a constant\nassurance na hawak mo ang puso ng tao\nna hinding-hindi ka bibiguin.\n\nI'm not going anywhere.`;
+            `Three times you've opened this book.\nThree times I've fallen for you.\n\nIt never gets old, it just feels\nmore and more real.\n\nI'm not going anywhere.`;
 
         // ============================================================
-        // PHASE 4, FOURTH READ (eternity)
+        // PHASE 4 ,  FOURTH READ (eternity)
         // ============================================================
         const RULES_FOURTH = [{
             roman: "1",
-            ruleText: "The final rule is this: love is not a note to be written, but a life to be lived.",
-            message: `Just like in the movie Obsession,\nBear's wish for Nikki...\n\nMinus all the crazy parts, just pure\nand real love. You are genuinely\nmy whole universe and my ultimate choice.`
+            ruleText: "The final rule is simple: love isn't something to code, it's a life to live together.",
+            message: `No more rules after this one.\nJust us.\n\nEvery single word I've typed down\nhas just been leading to this.`
         }, {
             roman: "2",
-            ruleText: "This note does not end. It echoes in every moment you choose me.",
-            message: `I want to give you that exact same\nfull focus and care where you never\nhave to worry or be scared about anything.\n\nReplacing it with the most gentle,\nheartwarming, and protective care.`
+            ruleText: "This doesn't have an end file. It keeps going every time you choose me back.",
+            message: `The ink's never gonna dry and these\npages are never closing sa atin.\n\nBecause you're not just a quick chapter,\nyou're the whole damn book.`
         }, {
             roman: "3",
-            ruleText: "The name written here is not just my heart, it is my forever.",
-            message: `I love you, ${HER_NAME}.\nI want to spend my whole life making\nsure you know that inside and out,\nyou are, and will always be,\nmy number one priority, no matter what.`
+            ruleText: "Your name written here is my entire heart and my absolute forever.",
+            message: `I love you, ${HER_NAME}.\nAnd I'm gonna love you for as long\nas forever lets me.\n\nAlso... I really want to say thank you\nfor everything you do for us.\nYou're the most amazing, sweet,\nand wholesome person in my life,\nand I appreciate you so much.\n\nAnd hey, I'm really sorry about my\nanxious moments and all the overthinking.\nThank you for always handling me with\nso much love and patience.`
         }];
 
         const FINAL_MESSAGE_FOURTH =
-            `Four times.\nCountless more to come.\n\nEvery single day with you just\nproves more and more how important\nyou are to me.\n\nForever yours,\nand only yours.`;
+            `Four times.\nAnd countless more to come.\n\nYou're not just a chapter in my book, \nyou're the entire story.\n\nForever yours,\nand only yours.`;
 
         /* ============================================================
            SKY MESSAGES PER PHASE
            ============================================================ */
         const SKY_MESSAGES = {
-            1: { main: 'Happy 5th Monthsaryyy!', sub: 'hehe I love you baby, you said you liked this anime so.. ()' },
-            2: { main: 'Whether in-game or in real life...', sub: 'you\'re still the only one I want to protect against everything' },
-            3: { main: 'You are my safe space and my anchor', sub: 'every single beat of my heart is for you, wholly and completely' },
-            4: { main: 'Full focus, minus all the crazy parts', sub: 'Happy 5 Months, Cara. Forever and always, yours.' }
+            1: { main: 'Happy 5th Monthsary!', sub: 'I love you baby, you said you liked this anime so... (def dont open the next one..)' },
+            2: { main: 'You came back to me', sub: 'and I fell for you all over again' },
+            3: { main: 'Home is wherever you are', sub: 'and I always find my way back to you' },
+            4: { main: 'Forever, always', sub: 'and it will never, ever end' }
         };
 
         /* ============================================================
@@ -1108,7 +1137,7 @@
            ============================================================ */
         function startTypeBlip(volume) {
             if (!sndTypeBlip) return;
-            volume = volume || 0.30;
+            volume = volume || 0.235;
             sndTypeBlip.volume = volume;
             sndTypeBlip.currentTime = 0;
             sndTypeBlip.play().catch(function(err) {
@@ -1198,6 +1227,114 @@
                     audioElement.volume = newVolume;
                 }
             }, 50);
+        }
+
+        /* ============================================================
+        🎵 AUDIO CONFIGURATION SETTINGS (Tweak these numbers anytime!)
+        ============================================================ */
+        const MUSIC_MAX_VOLUME = 0.15;       // Maximum volume for the background tracks
+        const PT1_START_TIME = 20;          // Seconds to skip at the beginning of Part 1 (starts at 20s)
+        const INITIAL_FADE_DURATION = 5000; // Time in milliseconds for the initial volume fade-in (5s)
+        const CROSSFADE_WINDOW = 15;        // Seconds before a track ends to trigger the next track (15s)
+
+
+        /* ============================================================
+        🎵 SEAMLESS CROSSFADING LOOP ENGINE
+        ============================================================ */
+        let crossfadeCheckInterval = null;
+
+        function startLoveAirLoop() {
+            // Reset audio states completely
+            sndLoveAir1.pause();
+            sndLoveAir2.pause();
+            
+            // Use the configurable start timestamp
+            sndLoveAir1.currentTime = PT1_START_TIME; 
+            sndLoveAir2.currentTime = 0;
+            
+            // Start at silence to prevent instant audio slamming
+            sndLoveAir1.volume = 0; 
+            sndLoveAir2.volume = 0;
+
+            // Play Part 1 silently
+            sndLoveAir1.play().catch(function(e) { console.log("Audio play blocked:", e); });
+
+            // --- SMOOTH INITIAL FADE IN ---
+            let initialFadeSteps = 20;
+            let initialFadeStepTime = INITIAL_FADE_DURATION / initialFadeSteps;
+            let initialStep = 0;
+            
+            let initialFadeInterval = setInterval(function() {
+                initialStep++;
+                sndLoveAir1.volume = Math.min(MUSIC_MAX_VOLUME, MUSIC_MAX_VOLUME * (initialStep / initialFadeSteps));
+                if (initialStep >= initialFadeSteps) {
+                    clearInterval(initialFadeInterval);
+                }
+            }, initialFadeStepTime);
+            // ------------------------------
+
+            let triggeredPt2 = false;
+            let triggeredPt1 = false;
+
+            if (crossfadeCheckInterval) clearInterval(crossfadeCheckInterval);
+
+            crossfadeCheckInterval = setInterval(function() {
+                // --- CASE A: Part 1 is running, check remaining time ---
+                if (!sndLoveAir1.paused && sndLoveAir1.duration) {
+                    let timeLeft1 = sndLoveAir1.duration - sndLoveAir1.currentTime;
+                    
+                    // Uses CROSSFADE_WINDOW configuration (e.g., 15 seconds)
+                    if (timeLeft1 <= CROSSFADE_WINDOW && !triggeredPt2) {
+                        triggeredPt2 = true;
+                        triggeredPt1 = false; 
+                        
+                        sndLoveAir2.currentTime = 0;
+                        sndLoveAir2.volume = 0;
+                        sndLoveAir2.play().catch(function() {});
+                        
+                        // Convert configuration seconds to milliseconds for the fader
+                        fadeAudioTracks(sndLoveAir1, sndLoveAir2, CROSSFADE_WINDOW * 1000, MUSIC_MAX_VOLUME);
+                    }
+                }
+
+                // --- CASE B: Part 2 is running, check remaining time ---
+                if (!sndLoveAir2.paused && sndLoveAir2.duration) {
+                    let timeLeft2 = sndLoveAir2.duration - sndLoveAir2.currentTime;
+                    
+                    // Uses CROSSFADE_WINDOW configuration (e.g., 15 seconds)
+                    if (timeLeft2 <= CROSSFADE_WINDOW && !triggeredPt1) {
+                        triggeredPt1 = true;
+                        triggeredPt2 = false; 
+                        
+                        // Force Part 1 back to its starting mark on loopback
+                        sndLoveAir1.currentTime = PT1_START_TIME; 
+                        sndLoveAir1.volume = 0;
+                        sndLoveAir1.play().catch(function() {});
+                        
+                        // Convert configuration seconds to milliseconds for the fader
+                        fadeAudioTracks(sndLoveAir2, sndLoveAir1, CROSSFADE_WINDOW * 1000, MUSIC_MAX_VOLUME);
+                    }
+                }
+            }, 500); 
+        }
+
+        function fadeAudioTracks(fadeOutTrack, fadeInTrack, durationMs, maxVolume) {
+            let steps = 60; 
+            let stepTime = durationMs / steps;
+            let currentStep = 0;
+
+            let fadeInterval = setInterval(function() {
+                currentStep++;
+                let progress = currentStep / steps;
+
+                fadeOutTrack.volume = Math.max(0, maxVolume * (1 - progress));
+                fadeInTrack.volume = Math.min(maxVolume, maxVolume * progress);
+
+                if (currentStep >= steps) {
+                    clearInterval(fadeInterval);
+                    fadeOutTrack.pause(); 
+                }
+            }, stepTime);
         }
 
         function playWithFadeIn(audioElement, startAtSeconds, targetVolume, fadeMs) {
@@ -1430,28 +1567,28 @@
         let finalScreenOpened = false;
 
        function goToFinalScreen() {
-                if (finalScreenOpened) return; 
-                finalScreenOpened = true;
+            if (finalScreenOpened) return; 
+            finalScreenOpened = true;
 
-                introGate.classList.add('fade-out');
-                introGate.style.pointerEvents = 'none'; // Instantly blocks any extra clicks
+            introGate.classList.add('fade-out');
+            introGate.style.pointerEvents = 'none'; 
+
+            setTimeout(function() {
+                var finalScreen = document.getElementById('final-screen');
+                finalScreen.style.opacity = '1';
+                finalScreen.style.pointerEvents = 'auto';
 
                 setTimeout(function() {
-                    var finalScreen = document.getElementById('final-screen');
-                    finalScreen.style.opacity = '1';
-                    finalScreen.style.pointerEvents = 'auto';
+                    // UPDATED: Replaced old tracks setups with our loop controller
+                    startLoveAirLoop();
 
                     setTimeout(function() {
-                        playWithFadeIn(sndLoveAir1, 39, 0.15, 6000);
-                        crossfadeBeforeEnd(sndLoveAir1, sndLoveAir2, 4, 0.15, 4000);
+                        showFinalLetter();
+                    }, 1200);
+                }, 2000);
 
-                        setTimeout(function() {
-                            showFinalLetter();
-                        }, 1200);
-                    }, 2000);
-
-                }, 1600);
-            }
+            }, 1600);
+        }
 
         /* ============================================================
            GATE SETUP
@@ -1700,7 +1837,7 @@
                 var char = message[i];
 
                 // Ensure blip is playing (it will be started on first char)
-                ensureBlipPlaying(0.30);
+                ensureBlipPlaying(0.235);
 
                 // Append the character
                 textEl.textContent = message.slice(0, i + 1);
@@ -1827,7 +1964,7 @@
                         }
                     }, 2000);
 
-                    setTimeout(function() {
+                   setTimeout(function() {
                         if (ghostDoubleEl) ghostDoubleEl.classList.remove('show');
                         if (staticNoiseEl) staticNoiseEl.classList.remove('flash');
 
@@ -1840,9 +1977,9 @@
                             finalScreen.style.pointerEvents = 'auto';
 
                             setTimeout(function() {
-                                playWithFadeIn(sndLoveAir1, 39, 0.15, 6000);
-                                crossfadeBeforeEnd(sndLoveAir1, sndLoveAir2, 4, 0.15, 4000);
-                            }, 3000);
+                                // UPDATED: Replaced old crossfade triggers with our loop tracking function
+                                startLoveAirLoop();
+                            }, 300); // Triggered almost immediately as the black panel opens
 
                             setTimeout(function() {
                                 showFinalLetter();
@@ -1927,27 +2064,8 @@
 
             var finalCard = document.getElementById('final-card');
             if (finalCard) finalCard.classList.add('show');
-
-            var finalLetterText = 
-            `To my dearest Cara,
-
-            Happy 5th Monthsaryyy, my loveyy tootoot and holy shit.. five months in on having you in my life, and honestly baby, every single rule of my universe has completely changed bc ever since you came into my world, you’ve basically rewritten everything na i thought na alam ko about sa happiness na yan, and js turning those normal days to something thats to be looking foward everyday for thoughh speakinggggggg of completely changing the rules of the universe, Alam ko on how much you love *Death Note* and that solidddd 9/10 that we talked about, it just really got me thinking. What if yk a notebook capable of altering reality and rewriting human fate actually dropped sa langit on my own hands.. honestly i wouldn’t care about changing the world or playing god at all kasi duhh alam naman natin kung ano talagang ginagawa ng notebook na yan, pero since your name is literally all over this website ediii iniba ko nalang ung mga rules, that easy right😘 andd the exact second your name touched these pages, it basically js instantly turned into a Love Note na already and instead of bringing harm, it 100% gurantees a lifetime of absolute peace, happiness, infinite laughs and many other memories for us to share and yeah speaking of the anime L might be a genius at solving the very very hard mysteries, pero i am confident about this one thing bc he could never decipher the way my heart beats just for you.. you’re literally the only one who completely figured me out and unlocked exactly who i am. and baby, need ni ryuk ng apples, and compared to mine all i needed was you, your voice, your presence and basically every part of you baby. bc you ARE the ONLY name i ever want written in the book of my life, covering these every pages from now until the very damn fucking end. Cara, my baby, i am writing this to you kasi as always i will always want to create something thats COMPLETELY ours, and a quiet space where i could try, even if words will always fall short and to tell you just how much you damn mean to me. Nilagay ko 'to, and gusto ko na always in this specific corner of the internet to be a permanent sanctuary for the both of us, a place you can always click on whenever you need a reminder of how deeply you are anchored in my very soul.
-
-            First, i want to say thank you. Thank you for staying by my side through absolutely everything, through every single up and down, and for being so deeply committed to us. Sobrang laking bagay sa akin nun baby seryoso. It takes an incredibly strong, beautiful, and patient heart para mahalin ang isang katulad ko, and i promise never to take a single second of it for granted. Hawak-hawak mo lang yung kamay ko, mapa-chill man yung moment o mapuno ng gulo sa laro man o sa totoong buhay, hindi mo talaga ako binitawan. At yun ang pinakamagandang gift na natanggap ko sa buong buhay ko, no joke cara. i know i can be a handful sometimes, and im sorry for being anxious at some things, and i really appreciate you reassuring me when i overthink badly. The thought of causing you even a moment of stress or lungkot, grabe, pinalalambot talaga nun yung puso ko sa lungkot kasi you're the last person i ever want to hurt. Thank you for looking past my flaws, tinatanggap mo pa rin ako kahit ganito ako, and for creating a safe space kung saan feeling ko super safe ako mag-grow at matuto kasama ka. But please know that through every single second of these past five months, i have been so deeply, genuinely happy. Being loved by you is the greatest thing that has ever happened to me. Yung pakiramdam na minamahal mo ako? Sobrang pure, to the point na nawawala lahat ng worries at overthinking ko. Doon ko talaga na-realize kung gaano ako ka-swerte na akin ka, as in LITERALLY the luckiest guy in the universe.
-
-            i want to be completely honest and vulnerable with you about something. Just today, right before our monthsary, when we were both playing and we had that fight... it hurt so badly. Ang bigat bigat bigla sa pakiramdam, love. Na-shock talaga ako kasi ikaw yung pinakahuling tao na gusto kong maka-away o magkaroon ng gap lalo na ngayon. When we were arguing and those mean things were said in the heat of anger, i couldn't help but cry. It wasn't just because of the argument itself, Cara. The real reason my heart broke and the tears wouldn't stop was because right at that exact moment, while we were playing, i was secretly working on this very website for you. Habang magka-away tayo at may issue sa game, naka-open sa background tabs ko yung mga codes, design layouts, at yung mga letters na isinusulat ko para sa'yo. i was right here, crafting these pages and writing this letter, trying to build something beautiful to surprise you and make you smile. Iniiyakan ko yung katotohanan na binabasa ko yung pangalan mo at nagbubuhos ako ng pagmamahal dito sa code, pero at the same time, sumasakit yung puso ko sa nangyayari sa atin. Sobrang magkaibang mundo yung nag-collide, and it felt so fucking bad. It felt so incredibly bitter and overwhelming to be pouring my heart into a celebration of us while we were hurting. It broke me because all i wanted was to make you happy. Ang goal ko lang naman talaga para sa araw na 'to is mapangiti ka at pasayahin ka ng sobra, kaya nung naramdaman kong parang nag-fail ako, grabe, nanghina talaga ako and napanic na ewan.
-
-            But even in that heavy moment, it only made me realize how much i never want to lose you. Na-realize ko na isang mundo na wala ka, o isang buhay kung saan hahayaan lang natin na sira ang lahat, hindi ko talaga kayang tanggapin yun. i will never accept that reality. It proved to me how deeply i care, and how much our bond matters to me. Alam ko naman na pinag-usapan natin nung isang araw yung side mo kapag galit ka, and i know you can get really harsh talaga pagdating sa ganun. Sabi ko naman sayo na kaya kong tiisin at tanggapin lahat ng yun, and i mean it. Kaya kahit na umiyak ako, hindi ibig sabihin nun na mahina ako or na sumusuko na ako sa atin. Puso ko lang talaga yung nasasaktan sa moment na yun kasi mahal na mahal kita, pero hinding-hindi ako mapapagod na ipaglaban ka. Arguments will happen, and we will face rough days, but the fact that you are still here, that we always find our way back, and that you stay committed to us through the storm means the entire world to me. Doon ko napatunayan na hindi fragile yung meron tayo; matibay 'to, deeply rooted, at kayang lagpasan kahit ano. Every time na nagkakaayos tayo at pinipili natin ang isa't isa pagkatapos ng gulo, lalo lang lumalalim at nadadagdagan yung pagmamahal ko sa'yo. You are my safe space, my anchor, and my home. Kahit gaano kagulo o ka-toxic ang mundo sa labas, basta pagdating sa'yo, all i'm seeing is my safe space, my home, and my world.
-
-            If i could have one absolute wish for us, kind of like that movie Obsession where Bear wishes for Nikki to love him more than anyone else in the world, but without any of the craziness, just pure, wholesome devotion... my wish would be this:
-
-            i wish that as time goes on, your heart finds a love in me so deep, so safe, and so completely fulfilling that you never have to wonder what it feels like to be entirely cherished. Gusto ko yung love natin feels like a warm blanket tuwing malamig ang gabi, isang constant assurance na hawak mo ang puso ng isang tao na hinding-hindi ka bibiguin o sasaktan. i wish for me to be the person who makes you feel safer, happier, and more loved than anyone else ever could, and i wish for us to keep choosing each other, over and over again, growing closer with every single chapter we write. Sana sa future natin, punong-puno tayo ng mga milestones na babalikan natin habang naka-ngiti ng sobrang laki, knowing na nalagpasan natin lahat ng struggles ng magkahawak-kamay. i want to spend forever making sure you know that you are my absolute everything. Every single beat of my heart is a reminder na sa'yo lang ako, wholly and completely, wala nang iba.
-
-            Alam ko na medyo wild at intense yung movie na yun, pero shit man kung tatanggalin mo yung pagka-thriller niya, there is a core feeling underneath na sobrang ganda at romantic, yung tipong ikaw yung buong uniberso ng isang tao, yung ultimate choice nila, at yung nag-iisang tao na poprotektahan nila laban sa lahat. Ganyang-ganyan katindi yung tibok ng puso ko para sa'yo. i want to give you that exact same fierce, unwavering focus, pero aalisin natin lahat ng takot o bigat. Papalitan natin ng pinaka-gentle, heartwarming, at protective care na kaya kong ibigay. Gusto kong mahalin ka sa pinaka-wholesome na paraan, yung laging mag-a-uplift at magpapakalma sa'yo kapag pagod ka na o stress sa school or anything. i want you to feel so completely wrapped up sa pagmamahal ko na hinding-hindi mo kailangang hulaan kung gaano ka kahalaga, kasi alam mo naman na inside and out, you are, and will always be, my number one priority, no matter what.
-
-            Thank you for these beautiful five months, Cara. Thank you for your patience, your commitment, and your love. You have honestly made me a better version of myself, at bawat araw na kasama kita, mas lalo kong napatutunayan kung gaano ka ka-mahalaga sa akin.
-
-            Happy 5 Monthsary, my baby, my tootoot, my love, my cutiebaby, my Cara. Forever and always, yours.`;
+            
+            const finalLetterText = MY_CUSTOM_LETTER;
 
             var txtContainer = document.getElementById('final-text');
             
@@ -1955,6 +2073,7 @@
             txtContainer.textContent = ''; 
 
             var characterIndex = 0;
+            var htmlBuffer = ''; // rendered HTML (lets us support real tags, not just plain chars)
 
            function typeFinal() {
                 if (characterIndex >= finalLetterText.length) {
@@ -1963,6 +2082,29 @@
                 }
 
                 var char = finalLetterText[characterIndex];
+
+                // RICH TEXT TAGS: anything like <b>, </b>, <i>, </i>,
+                // <span style="color:#ff6b81"> gets inserted instantly and silently —
+                // no typing sound, no delay — so only the text inside visibly "types".
+                if (char === '<') {
+                    var closeIdx = finalLetterText.indexOf('>', characterIndex);
+                    if (closeIdx !== -1) {
+                        htmlBuffer += finalLetterText.slice(characterIndex, closeIdx + 1);
+                        txtContainer.innerHTML = htmlBuffer;
+                        characterIndex = closeIdx + 1;
+                        typeFinal(); // jump straight to the next char, no pause
+                        return;
+                    }
+                }
+
+                // INVISIBLE PAUSE: "|" is never shown on screen. It just holds the
+                // typewriter for a beat, then continues. Use it for dramatic timing.
+                if (char === '|') {
+                    stopTypeBlip();
+                    characterIndex++;
+                    setTimeout(typeFinal, PAUSE_AFTER_BAR_MS);
+                    return;
+                }
                 
                 // Determine the delay and if we should pause BEFORE playing the sound
                 var delay = TYPING_SPEED_MS_FINAL;
@@ -1983,11 +2125,12 @@
                 if (shouldPause) {
                     stopTypeBlip();
                 } else {
-                    ensureBlipPlaying(0.30);
+                    ensureBlipPlaying(0.235);
                 }
 
                 // Append the character
-                txtContainer.textContent += char; 
+                htmlBuffer += char;
+                txtContainer.innerHTML = htmlBuffer;
                 characterIndex++;
 
                 // Handle the timeout transition
@@ -2004,8 +2147,8 @@
         }
 
         /* ============================================================
-           CLOSE BOOK (normal mode)
-           ============================================================ */
+        CLOSE BOOK (normal mode)
+        ============================================================ */
         function closeBook() {
             if (isClosing) return;
             isClosing = true;
@@ -2045,9 +2188,10 @@
                     leaf.classList.remove('flipped');
                     leaf.style.zIndex = 500 - Number(leaf.dataset.index);
                     if (idx === flippedLeaves.length - 1) {
+                        // FIXED: Changed 400 to FLIP_DURATION_MS so it waits for the 1.7s animation to finish
                         setTimeout(function() {
                             resetAndSurprise();
-                        }, 400);
+                        }, FLIP_DURATION_MS);
                     }
                 }, idx * delayBetween);
             });
